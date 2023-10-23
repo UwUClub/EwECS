@@ -1,4 +1,7 @@
 add_subdirectory(Event)
+add_subdirectory(SFMLDisplayClass)
+add_subdirectory(ConfigReader)
+
 
 target_sources(ecs PRIVATE
     World.cpp
@@ -8,6 +11,10 @@ target_sources(ecs PRIVATE
 target_link_libraries(ecs
         PRIVATE
         EwECS::EwECS_warnings
+        sfml-graphics
+        sfml-window
+        sfml-system
+        nlohmann_json
 )
 
 target_include_directories(ecs PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

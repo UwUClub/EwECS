@@ -1,4 +1,6 @@
 add_subdirectory(Event)
+add_subdirectory(SFMLDisplayClass)
+add_subdirectory(ConfigReader)
 
 target_sources(ecs PUBLIC
     EwECS.hpp
