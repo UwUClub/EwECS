@@ -23,7 +23,11 @@ namespace ECS::Asset {
             AssetManager() = default;
 
         public:
-            static AssetManager &getInstance();
+            static AssetManager &getInstance() noexcept
+            {
+                static AssetManager instance;
+                return instance;
+            }
 
             AssetManager(AssetManager &&) = default;
             AssetManager(const AssetManager &) = default;
@@ -42,7 +46,7 @@ namespace ECS::Asset {
                 return std::any_cast<AssetHandler<Asset> &>(_assetsHandlers[typeIndex]);
             }
 
-            template<typename Asset>
+            template<Pointer Asset>
             AssetHandler<Asset> &RegisterAssetHandler(std::function<void(Asset)> aDeleter)
             {
                 auto typeIndex = std::type_index(typeid(Asset));
@@ -54,11 +58,37 @@ namespace ECS::Asset {
                 return std::any_cast<AssetHandler<Asset> &>(_assetsHandlers[typeIndex]);
             }
 
-            template<typename Asset>
+            template<NonPointer Asset>
+            AssetHandler<Asset> &RegisterAssetHandler(std::function<void(const Asset &)> aDeleter)
+            {
+                auto typeIndex = std::type_index(typeid(Asset));
+
+                if (_assetsHandlers.find(typeIndex) != _assetsHandlers.end()) {
+                    throw AssetManagerException("Asset type already registered");
+                }
+                _assetsHandlers[typeIndex] = AssetHandler<Asset>(aDeleter);
+                return std::any_cast<AssetHandler<Asset> &>(_assetsHandlers[typeIndex]);
+            }
+
+            template<Pointer Asset>
             void addAsset(const std::string &path, Asset asset)
             {
+                if (asset == nullptr) {
+                    throw AssetManagerException("Asset is nullptr");
+                }
                 try {
                     getAssetHandler<Asset>().addAsset(path, asset);
+                } catch (const std::exception &e) {
+                    throw AssetManagerException(e.what());
+                }
+            }
+
+            template<NonPointer Asset>
+            void addAsset(const std::string &path, Asset &&asset)
+            {
+                try {
+                    getAssetHandler<Asset>().template addAsset<Asset>(path, std::forward<Asset>(asset));
+                    std::cout << "Added asset ma " << path << std::endl;
                 } catch (const std::exception &e) {
                     throw AssetManagerException(e.what());
                 }

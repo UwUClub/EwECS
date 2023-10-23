@@ -13,16 +13,25 @@
 #include <memory>
 #include <type_traits>
 
+template<typename Asset>
+concept NonPointer = not std::is_pointer_v<Asset>;
+template<typename Asset>
+concept Pointer = std::is_pointer_v<Asset>;
+
 namespace ECS::Asset {
     template<typename Asset>
     class AssetHandler
     {
         public:
             //-------------- TYPEDEFS --------------//
-            using assetDeleter = std::function<void(Asset)>;
+            using assetDeleter = std::function<void(Asset &)>;
+
+        private:
+            assetDeleter _deleter;
+            std::unordered_map<std::string, Asset> _assets;
 
         public:
-            explicit AssetHandler(std::function<void(Asset)> aDeleter = customDeleter)
+            explicit AssetHandler(assetDeleter aDeleter = customDeleter)
                 : _deleter(aDeleter)
             {}
 
@@ -32,14 +41,29 @@ namespace ECS::Asset {
             AssetHandler &operator=(const AssetHandler &) = default;
             ~AssetHandler()
             {
-                for (auto &asset : _assets) {
-                    _deleter(asset.second);
+                for (auto &[path, asset] : _assets) {
+                    std::cout << "Deleting asset " << path << std::endl;
+                    _deleter(asset);
                 }
             }
 
-            void addAsset(const std::string &path, Asset asset)
+            template<Pointer AssetPtr>
+            void addAsset(const std::string &path, AssetPtr asset)
             {
-                _assets[path] = std::move(asset);
+                if (_assets.find(path) != _assets.end()) {
+                    return;
+                }
+                _assets[path] = asset;
+            }
+
+            template<NonPointer AssetRef>
+            void addAsset(const std::string &path, Asset &&asset)
+            {
+                if (_assets.find(path) != _assets.end()) {
+                    return;
+                }
+                _assets.emplace(path, std::move(asset));
+                std::cout << "Added asset " << path << std::endl;
             }
 
             Asset &getAsset(const std::string &path)
@@ -90,10 +114,6 @@ namespace ECS::Asset {
                 private:
                     std::string _message;
             };
-
-        private:
-            std::function<void(Asset)> _deleter;
-            std::unordered_map<std::string, Asset> _assets;
     };
 } // namespace ECS::Asset
 #endif /* !ASSETHANDLER_HPP_ */
