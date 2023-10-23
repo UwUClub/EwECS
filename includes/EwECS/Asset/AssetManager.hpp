@@ -23,11 +23,7 @@ namespace ECS::Asset {
             AssetManager() = default;
 
         public:
-            static AssetManager &getInstance()
-            {
-                static AssetManager instance;
-                return instance;
-            }
+            static AssetManager &getInstance();
 
             AssetManager(AssetManager &&) = default;
             AssetManager(const AssetManager &) = default;
