@@ -16,9 +16,9 @@
 #include <string>
 #include <unordered_map>
 #include "LoadedSprite.hpp"
-#include "KeyboardEvent.hpp"
-#include "Utils.hpp"
-#include "World.hpp"
+#include "../Event/KeyboardEvent.hpp"
+#include "../Utils.hpp"
+#include "../World.hpp"
 
 
 namespace ECS {
