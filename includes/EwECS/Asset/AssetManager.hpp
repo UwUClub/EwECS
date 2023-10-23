@@ -23,11 +23,13 @@ namespace ECS::Asset {
             AssetManager() = default;
 
         public:
-            static AssetManager &getInstance() noexcept
-            {
-                static AssetManager instance;
-                return instance;
-            }
+            //-------------- CTORS/DTOR --------------//
+            /**
+             * @brief Get the Instance object
+             *
+             * @return AssetManager&
+             */
+            static AssetManager &getInstance() noexcept;
 
             AssetManager(AssetManager &&) = default;
             AssetManager(const AssetManager &) = default;
@@ -35,6 +37,14 @@ namespace ECS::Asset {
             AssetManager &operator=(const AssetManager &) = default;
             ~AssetManager() = default;
 
+            //-------------- METHODS --------------//
+            /**
+             * @brief Get the Asset Handler object
+             *
+             * @tparam Asset The type of the asset, can be a pointer or not, if it's a pointer, add * at the end of the
+             * type
+             * @return AssetHandler<Asset>& The asset handler
+             */
             template<typename Asset>
             AssetHandler<Asset> &getAssetHandler()
             {
@@ -46,6 +56,14 @@ namespace ECS::Asset {
                 return std::any_cast<AssetHandler<Asset> &>(_assetsHandlers[typeIndex]);
             }
 
+            /**
+             * @brief Register a type of asset to handle
+             * @details case of a pointer
+             * @tparam Asset The type of the asset, is a pointer or not, if it's a pointer, add * at the end of the
+             * @param aDeleter The function that will be called when the asset is deleted, by default it will call
+             * delete on the asset if it's a pointer
+             * @return AssetHandler<Asset>& The asset handler
+             */
             template<Pointer Asset>
             AssetHandler<Asset> &RegisterAssetHandler(std::function<void(Asset)> aDeleter)
             {
@@ -58,6 +76,13 @@ namespace ECS::Asset {
                 return std::any_cast<AssetHandler<Asset> &>(_assetsHandlers[typeIndex]);
             }
 
+            /**
+             * @brief Register a type of asset to handle
+             * @details case of a non pointer
+             * @tparam Asset The type of the asset, not a ptr
+             * @param aDeleter The function that will be called when the asset is deleted, by default it will do nothing
+             * @return AssetHandler<Asset>& The asset handler
+             */
             template<NonPointer Asset>
             AssetHandler<Asset> &RegisterAssetHandler(std::function<void(const Asset &)> aDeleter)
             {
@@ -70,6 +95,14 @@ namespace ECS::Asset {
                 return std::any_cast<AssetHandler<Asset> &>(_assetsHandlers[typeIndex]);
             }
 
+            /**
+             * @brief Add an asset to the handler
+             * @details case where the asset is a pointer, if the asset has not been registered yet, it will be but with
+             * the default deleter
+             * @tparam Asset a pointer to the asset
+             * @param path the path to the asset
+             * @param asset the asset
+             */
             template<Pointer Asset>
             void addAsset(const std::string &path, Asset asset)
             {
@@ -83,17 +116,31 @@ namespace ECS::Asset {
                 }
             }
 
+            /**
+             * @brief Add an asset to the handler
+             * @details case where the asset is not a pointer, if the asset has not been registered yet, it will be but
+             * with the default deleter (does nothing on non pointer)
+             * @tparam Asset a reference to the asset
+             * @param path the path to the asset
+             * @param asset the asset
+             */
             template<NonPointer Asset>
             void addAsset(const std::string &path, Asset &&asset)
             {
                 try {
                     getAssetHandler<Asset>().template addAsset<Asset>(path, std::forward<Asset>(asset));
-                    std::cout << "Added asset ma " << path << std::endl;
                 } catch (const std::exception &e) {
                     throw AssetManagerException(e.what());
                 }
             }
 
+            /**
+             * @brief Remove an asset from the handler
+             *
+             * @tparam Asset The type of the asset, can be a pointer or not, if it's a pointer, add * at the end of the
+             * type
+             * @param path the path to the asset
+             */
             template<typename Asset>
             void removeAsset(const std::string &path)
             {
@@ -110,6 +157,14 @@ namespace ECS::Asset {
                 }
             }
 
+            /**
+             * @brief Get the Asset object
+             *
+             * @tparam Asset The type of the asset, can be a pointer or not, if it's a pointer, add * at the end of the
+             * type
+             * @param path the path to the asset
+             * @return Asset& the asset
+             */
             template<typename Asset>
             Asset &getAsset(const std::string &path)
             {
@@ -120,6 +175,12 @@ namespace ECS::Asset {
                 }
             }
 
+            /**
+             * @brief Clear all the assets of a type
+             *
+             * @tparam Asset The type of the asset, can be a pointer or not, if it's a pointer, add * at the end of the
+             * type
+             */
             template<typename Asset>
             void clearAssets()
             {

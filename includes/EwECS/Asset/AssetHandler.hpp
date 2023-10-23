@@ -19,6 +19,12 @@ template<typename Asset>
 concept Pointer = std::is_pointer_v<Asset>;
 
 namespace ECS::Asset {
+    /**
+     * @brief
+     *
+     * @tparam Asset The type of the asset, can be a pointer or not, if it's a pointer, add * at the end of the type
+     * @details Add an asset before getting it
+     */
     template<typename Asset>
     class AssetHandler
     {
@@ -31,6 +37,13 @@ namespace ECS::Asset {
             std::unordered_map<std::string, Asset> _assets;
 
         public:
+            //-------------- CTORS/DTOR --------------//
+            /**
+             * @brief Construct a new Asset Handler object
+             *
+             * @param aDeleter The function that will be called when the asset is deleted, by default it will call
+             * delete on the asset if it's a pointer
+             */
             explicit AssetHandler(assetDeleter aDeleter = customDeleter)
                 : _deleter(aDeleter)
             {}
@@ -39,14 +52,26 @@ namespace ECS::Asset {
             AssetHandler(const AssetHandler &) = default;
             AssetHandler &operator=(AssetHandler &&) noexcept = default;
             AssetHandler &operator=(const AssetHandler &) = default;
+
+            /**
+             * @brief Destroy the Asset Handler object
+             *
+             */
             ~AssetHandler()
             {
-                for (auto &[path, asset] : _assets) {
-                    std::cout << "Deleting asset " << path << std::endl;
-                    _deleter(asset);
+                for (auto &asset : _assets) {
+                    _deleter(asset.second);
                 }
             }
 
+            //-------------- METHODS --------------//
+            /**
+             * @brief Add an asset to the handler
+             * @details case where the asset is a pointer
+             * @tparam AssetPtr a pointer to the asset
+             * @param path the path to the asset
+             * @param asset the asset
+             */
             template<Pointer AssetPtr>
             void addAsset(const std::string &path, AssetPtr asset)
             {
@@ -56,6 +81,13 @@ namespace ECS::Asset {
                 _assets[path] = asset;
             }
 
+            /**
+             * @brief Add an asset to the handler
+             * @details case where the asset is not a pointer
+             * @tparam AssetRef a reference to the asset
+             * @param path the path to the asset
+             * @param asset the asset
+             */
             template<NonPointer AssetRef>
             void addAsset(const std::string &path, Asset &&asset)
             {
@@ -63,9 +95,14 @@ namespace ECS::Asset {
                     return;
                 }
                 _assets.emplace(path, std::move(asset));
-                std::cout << "Added asset " << path << std::endl;
             }
 
+            /**
+             * @brief Get the Asset object
+             *
+             * @param path the path to the asset
+             * @return Asset& the asset
+             */
             Asset &getAsset(const std::string &path)
             {
                 if (_assets.find(path) == _assets.end()) {
@@ -74,6 +111,11 @@ namespace ECS::Asset {
                 return _assets[path];
             }
 
+            /**
+             * @brief Remove an asset from the handler
+             *
+             * @param path the path to the asset
+             */
             void removeAsset(const std::string &path)
             {
                 if (_assets.find(path) == _assets.end()) {
@@ -83,6 +125,10 @@ namespace ECS::Asset {
                 _assets.erase(path);
             }
 
+            /**
+             * @brief Clear all the assets from the handler
+             *
+             */
             void clear()
             {
                 for (auto &asset : _assets) {
