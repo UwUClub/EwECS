@@ -1,4 +1,5 @@
 add_subdirectory(Event)
+add_subdirectory(Asset)
 
 target_sources(ecs PRIVATE
     World.cpp
