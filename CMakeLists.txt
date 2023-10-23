@@ -46,6 +46,12 @@ add_library(ecs STATIC)
 add_subdirectory(includes)
 add_subdirectory(src)
 
+#export the includes
+target_include_directories(ecs PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/includes>
+        $<INSTALL_INTERFACE:includes>
+        )
+
 # Adding the tests:
 # include(CTest)
 

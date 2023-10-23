@@ -54,9 +54,14 @@ namespace ECS::Core {
                 return *this;
             }
 
-            referenceType operator[](std::size_t aIndex);
-
-            constReferenceType operator[](std::size_t aIndex) const;
+            referenceType operator[](std::size_t aIndex)
+            {
+                return _container[aIndex];
+            }
+            constReferenceType operator[](std::size_t aIndex) const
+            {
+                return _container[aIndex];
+            }
 
             //-------------- METHODS ITERATOR--------------//
             iterator begin()
