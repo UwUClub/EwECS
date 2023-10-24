@@ -104,13 +104,13 @@ namespace ECS::Asset {
              * @param asset the asset
              */
             template<Pointer Asset>
-            void addAsset(const std::string &path, Asset asset)
+            void addAsset(const std::string &aPath, Asset aAsset)
             {
-                if (asset == nullptr) {
+                if (aAsset == nullptr) {
                     throw AssetManagerException("Asset is nullptr");
                 }
                 try {
-                    getAssetHandler<Asset>().addAsset(path, asset);
+                    getAssetHandler<Asset>().addAsset(aPath, aAsset);
                 } catch (const std::exception &e) {
                     throw AssetManagerException(e.what());
                 }
@@ -125,10 +125,10 @@ namespace ECS::Asset {
              * @param asset the asset
              */
             template<NonPointer Asset>
-            void addAsset(const std::string &path, Asset &&asset)
+            void addAsset(const std::string &aPath, Asset &&aAsset)
             {
                 try {
-                    getAssetHandler<Asset>().template addAsset<Asset>(path, std::forward<Asset>(asset));
+                    getAssetHandler<Asset>().template addAsset<Asset>(aPath, std::forward<Asset>(aAsset));
                 } catch (const std::exception &e) {
                     throw AssetManagerException(e.what());
                 }
@@ -142,7 +142,7 @@ namespace ECS::Asset {
              * @param path the path to the asset
              */
             template<typename Asset>
-            void removeAsset(const std::string &path)
+            void removeAsset(const std::string &aPath)
             {
                 auto typeIndex = std::type_index(typeid(Asset));
 
@@ -151,7 +151,7 @@ namespace ECS::Asset {
                 }
 
                 try {
-                    getAssetHandler<Asset>().removeAsset(path);
+                    getAssetHandler<Asset>().removeAsset(aPath);
                 } catch (const std::exception &e) {
                     throw AssetManagerException(e.what());
                 }
@@ -166,10 +166,10 @@ namespace ECS::Asset {
              * @return Asset& the asset
              */
             template<typename Asset>
-            Asset &getAsset(const std::string &path)
+            Asset &getAsset(const std::string &aPath)
             {
                 try {
-                    return getAssetHandler<Asset>().getAsset(path);
+                    return getAssetHandler<Asset>().getAsset(aPath);
                 } catch (const std::exception &e) {
                     throw AssetManagerException(e.what());
                 }
