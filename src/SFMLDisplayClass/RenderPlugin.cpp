@@ -2,6 +2,7 @@
 #include "EwECS/Asset/AssetManager.hpp"
 #include "EwECS/ConfigReader/ConfigReader.hpp"
 #include "EwECS/SFMLDisplayClass/LoadedSprite.hpp"
+#include "EwECS/SFMLDisplayClass/SFMLDisplayClass.hpp"
 #include "EwECS/World.hpp"
 #include "SFML/Graphics/Texture.hpp"
 
@@ -48,6 +49,10 @@ ECS::Render::RenderPlugin::~RenderPlugin() = default;
 void ECS::Render::RenderPlugin::plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager)
 {
     aWorld.registerComponent<Component::LoadedSprite>();
+
+    aWorld.addSystem<Component::LoadedSprite, ECS::Utils::Vector2f>(ECS::SFMLDisplayClass::displayEntities);
+    aWorld.addSystem<Component::LoadedSprite>(ECS::SFMLDisplayClass::loadTextures);
+    aWorld.addSystem(ECS::SFMLDisplayClass::getInput);
 
     aAssetManager.registerAssetHandler<sf::Texture *>();
 }

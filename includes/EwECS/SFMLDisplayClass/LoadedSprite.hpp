@@ -24,8 +24,7 @@ namespace Component {
              */
             LoadedSprite()
                 : texture(nullptr),
-                  rect(sf::IntRect(0, 0, 0, 0)),
-                  srcRect(sf::IntRect(0, 0, 0, 0))
+                  rect(sf::IntRect(0, 0, 0, 0))
             {}
             /**
              * @brief Construct a new Loaded Sprite object
@@ -33,9 +32,9 @@ namespace Component {
              * @param aPath path to the sprite
              * @param aTexture texture of the sprite (once loaded)
              * @param aLeft left position of the sprite in the texture
-              * @param aTop top position of the sprite in the texture
-              * @param aWidth width of the sprite in the texture
-              * @param aHeight height of the sprite in the texture
+             * @param aTop top position of the sprite in the texture
+             * @param aWidth width of the sprite in the texture
+             * @param aHeight height of the sprite in the texture
              */
             LoadedSprite(std::string aPath, sf::Texture *aTexture, int aLeft, int aTop, int aWidth, int aHeight)
                 : path(std::move(aPath)),
@@ -64,7 +63,6 @@ namespace Component {
             std::string path;
             sf::Texture *texture;
             sf::IntRect rect;
-            sf::IntRect srcRect;
             float scale = 1.0;
     };
 } // namespace Component

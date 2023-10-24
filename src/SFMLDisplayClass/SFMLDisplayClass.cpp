@@ -30,13 +30,9 @@
 namespace ECS {
     SFMLDisplayClass::SFMLDisplayClass()
     {
-        auto &configReader = ConfigReader::getInstance();
-        auto path = Render::RenderPluginConfig::getInstance()._configPath;
+        auto &renderConfig = Render::RenderPluginConfig::getInstance();
 
-        configReader.loadConfig("assets/config/r-type.json");
-        auto &graphicsConf = configReader.get(path)["graphics"];
-
-        _window.create(sf::VideoMode(graphicsConf["width"], graphicsConf["height"]), "R-Type");
+        _window.create(sf::VideoMode(renderConfig._windowWidth, renderConfig._windowHeight), renderConfig._windowName);
         /*if (_window == nullptr) {
             std::cout << "Failed to create SFML window: " << std::endl;
             return;
@@ -118,7 +114,7 @@ namespace ECS {
             auto &spriteData = aSprites[i].value();
             auto &pos = aPos[i].value();
 
-            if (spriteData.srcRect != sf::IntRect(0, 0, 0, 0)) {
+            if (spriteData.rect != sf::IntRect(0, 0, 0, 0)) {
                 sf::Sprite sprite;
 
                 sprite.setTexture(*spriteData.texture);
