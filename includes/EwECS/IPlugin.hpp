@@ -23,7 +23,7 @@ namespace ECS::Plugin {
         public:
             virtual ~IPlugin() = default;
 
-            virtual void load(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager) = 0;
+            virtual void plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager) = 0;
     };
 
     class IConfigPlugin

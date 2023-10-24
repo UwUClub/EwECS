@@ -44,7 +44,7 @@ namespace ECS::Asset {
              * @param aDeleter The function that will be called when the asset is deleted, by default it will call
              * delete on the asset if it's a pointer
              */
-            explicit AssetHandler(assetDeleter aDeleter = customDeleter)
+            explicit AssetHandler(assetDeleter aDeleter)
                 : _deleter(aDeleter)
             {}
 
@@ -125,6 +125,11 @@ namespace ECS::Asset {
                 _assets.erase(aPath);
             }
 
+            [[nodiscard]] bool hasAsset(const std::string &aPath) const
+            {
+                return _assets.find(aPath) != _assets.end();
+            }
+
             /**
              * @brief Clear all the assets from the handler
              *
@@ -138,13 +143,6 @@ namespace ECS::Asset {
             }
 
         private:
-            static void customDeleter(Asset aAsset)
-            {
-                if constexpr (std::is_pointer_v<Asset>) {
-                    delete aAsset;
-                }
-            }
-
             class AssetHandlerException : public std::exception
             {
                 public:

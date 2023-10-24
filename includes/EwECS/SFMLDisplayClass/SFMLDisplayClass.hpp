@@ -6,36 +6,35 @@
 */
 
 #ifndef SDLDISPLAYClass_HPP_
-#define SDLDISPLAYClass_HPP_
+    #define SDLDISPLAYClass_HPP_
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Window/Window.hpp>
-#include <cstddef>
-#include <string>
-#include <unordered_map>
-#include "LoadedSprite.hpp"
-#include "../Event/KeyboardEvent.hpp"
-#include "../Utils.hpp"
-#include "../World.hpp"
-
+    #include <SFML/Graphics.hpp>
+    #include <SFML/Graphics/RenderWindow.hpp>
+    #include <SFML/Graphics/Texture.hpp>
+    #include <SFML/Window/Window.hpp>
+    #include <cstddef>
+    #include <string>
+    #include "../Event/KeyboardEvent.hpp"
+    #include "../Utils.hpp"
+    #include "../World.hpp"
+    #include "LoadedSprite.hpp"
+    #include <unordered_map>
 
 namespace ECS {
     class SFMLDisplayClass
     {
         public:
             /**
-            * @brief Destroy the SFMLDisplayClass object
-            *
-            */
+             * @brief Destroy the SFMLDisplayClass object
+             *
+             */
             ~SFMLDisplayClass();
 
             /**
-            * @brief Get an Instance of the SFMLDisplayClass (singleton)
-            *
-            * @return SFMLDisplayClass&
-            */
+             * @brief Get an Instance of the SFMLDisplayClass (singleton)
+             *
+             * @return SFMLDisplayClass&
+             */
             static SFMLDisplayClass &getInstance()
             {
                 static SFMLDisplayClass instance;
@@ -44,37 +43,37 @@ namespace ECS {
             }
 
             /**
-            * @brief Get the texture object
-            *
-            * @return sf::Texture*
-            */
+             * @brief Get the texture object
+             *
+             * @return sf::Texture*
+             */
             sf::Texture *getTexture(const std::string &path);
 
             /**
-            * @brief Free the rects of the entity
-            *
-            * @param idx The index of the entity
-            */
+             * @brief Free the rects of the entity
+             *
+             * @param idx The index of the entity
+             */
             void freeRects(const std::size_t &idx);
 
             /**
-            * @brief Get the player input
-            * 
-            */
+             * @brief Get the player input
+             *
+             */
             static void getInput();
 
             /**
              * @brief Display all the entities of the game
-             * 
+             *
              * @param aSprites SparseArray of all the sprites
              * @param aPos SparseArray of all the positions
              */
             static void displayEntities(Core::SparseArray<Component::LoadedSprite> &aSprites,
-                                 Core::SparseArray<Utils::Vector2f> &aPos);
+                                        Core::SparseArray<Utils::Vector2f> &aPos);
 
             /**
              * @brief Load all the textures of the game
-             * 
+             *
              * @param aSprites SparseArray of all the sprites
              */
             static void loadTextures(Core::SparseArray<Component::LoadedSprite> &aSprites);
@@ -98,11 +97,11 @@ namespace ECS {
 
             std::unordered_map<std::string, sf::Texture *> _textures;
             /**
-            * @brief Construct a new SFMLDisplayClass object
-            *
-            */
+             * @brief Construct a new SFMLDisplayClass object
+             *
+             */
             SFMLDisplayClass();
     };
 
-    #endif /* !SDLDISPLAYClass_HPP_ */
+#endif /* !SDLDISPLAYClass_HPP_ */
 } // namespace ECS
