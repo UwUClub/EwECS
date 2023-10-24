@@ -8,6 +8,7 @@
 #ifndef EWECS_HPP_
 #define EWECS_HPP_
 
+#include "Asset/AssetHandler.hpp"
 #include "Event/EventHandler.hpp"
 #include "Event/EventManager.hpp"
 #include "Event/KeyboardEvent.hpp"
