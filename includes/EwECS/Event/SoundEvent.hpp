@@ -38,7 +38,7 @@ namespace ECS::Event {
              *
              * @param aSoundEventType The type of the sound event.
              */
-            explicit SoundEvent(const SoundEventType &aSoundEventType);
+            explicit SoundEvent(const SoundEventType &aSoundEventType, const SoundType &aSoundType, const SoundState &aSoundState);
 
             SoundEvent(const SoundEvent &soundEvent) = default;
             SoundEvent(SoundEvent &&soundEvent) = default;
@@ -47,6 +47,8 @@ namespace ECS::Event {
 
             //-------------------ATTRIBUTES-------------------//
             SoundEventType _soundEventType; /*!< The type of the sound event. */
+            SoundState _soundState;         /*!< The state of the sound. */
+            SoundType _soundType;          /*!< The type of the sound. */
     };
 }
 

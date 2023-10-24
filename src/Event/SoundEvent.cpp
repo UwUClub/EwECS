@@ -5,7 +5,10 @@
 #include "SoundEvent.hpp"
 
 namespace ECS::Event {
-    SoundEvent::SoundEvent(const SoundEventType &aSoundEventType) : _soundEventType(aSoundEventType)
-    {
-    }
+    // -------------------CONSTRUCTORS / DESTRUCTOR-------------------//
+    SoundEvent::SoundEvent(const SoundEventType &aSoundEventType, const SoundType &aSoundType, const SoundState &aSoundState)
+        : _soundEventType(aSoundEventType),
+          _soundState(aSoundState),
+          _soundType(aSoundType)
+    {}
 }
