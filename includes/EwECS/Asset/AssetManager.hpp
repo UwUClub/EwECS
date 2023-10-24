@@ -51,7 +51,7 @@ namespace ECS::Asset {
                 auto typeIndex = std::type_index(typeid(Asset));
 
                 if (_assetsHandlers.find(typeIndex) == _assetsHandlers.end()) {
-                    _assetsHandlers.emplace(typeIndex, AssetHandler<Asset>(customDeleter));
+                    _assetsHandlers.emplace(typeIndex, AssetHandler<Asset>(customDeleter<Asset>));
                 }
                 return std::any_cast<AssetHandler<Asset> &>(_assetsHandlers[typeIndex]);
             }

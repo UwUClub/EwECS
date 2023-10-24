@@ -3,12 +3,12 @@
 //
 
 #include "Sound.hpp"
-#include "Components/Components+Sounds.hpp"
+#include <SFML/Audio.hpp>
+#include <iostream>
 #include "Asset/AssetHandler.hpp"
 #include "AssetManager.hpp"
 #include "World.hpp"
-#include <SFML/Audio.hpp>
-#include <iostream>
+#include "Components/Components+Sounds.hpp"
 
 namespace ECS {
     void Sound::plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager)
@@ -95,4 +95,4 @@ namespace ECS {
     {
         sf::Listener::setGlobalVolume(aVolume);
     }
-}
+} // namespace ECS
