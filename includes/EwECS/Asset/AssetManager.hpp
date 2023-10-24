@@ -51,7 +51,7 @@ namespace ECS::Asset {
                 auto typeIndex = std::type_index(typeid(Asset));
 
                 if (_assetsHandlers.find(typeIndex) == _assetsHandlers.end()) {
-                    _assetsHandlers[typeIndex] = AssetHandler<Asset>();
+                    _assetsHandlers.emplace(typeIndex, AssetHandler<Asset>(customDeleter));
                 }
                 return std::any_cast<AssetHandler<Asset> &>(_assetsHandlers[typeIndex]);
             }
@@ -193,10 +193,11 @@ namespace ECS::Asset {
             }
 
             template<typename Asset>
-            [[nodiscard]] bool hasAsset(const std::string &aPath) const
+            bool hasAsset(const std::string &aPath)
             {
                 try {
-                    return getAssetHandler<Asset>().hasAsset(aPath);
+                    auto &handler = getAssetHandler<Asset>();
+                    return handler.hasAsset(aPath);
                 } catch (const std::exception &e) {
                     throw AssetManagerException(e.what());
                 }

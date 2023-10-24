@@ -4,6 +4,7 @@
 
 #include "Sound.hpp"
 #include "Components/Components+Sounds.hpp"
+#include "Asset/AssetHandler.hpp"
 #include "AssetManager.hpp"
 #include "World.hpp"
 #include <SFML/Audio.hpp>
@@ -15,18 +16,17 @@ namespace ECS {
         aWorld.registerComponent<Component::SoundsComponents>();
 
         aAssetManager.registerAssetHandler<sf::Sound *>();
+        aAssetManager.registerAssetHandler<sf::SoundBuffer *>();
     }
 
     void Sound::createSound(const std::string &aPath, bool aLoop, float aVolume)
     {
-        auto *sound = Asset::AssetManager::getInstance().getAsset<>()
+        if (!Asset::AssetManager::getInstance().hasAsset<sf::Sound *>(aPath)) {
+            auto *sound = new sf::Sound;
 
-        if (sound == nullptr) {
-            sound = new sf::Sound();
-            Asset::AssetManager::getInstance().addAsset(aPath, sound);
+            sound->setBuffer(*Asset::AssetManager::getInstance().getAsset<sf::SoundBuffer *>(aPath));
+            Asset::AssetManager::getInstance().addAsset<sf::Sound *>(aPath, sound);
         }
-        sound->setLoop(aLoop);
-        sound->setVolume(aVolume);
     }
 
     void Sound::play(const std::string &aPath, bool aLoop, float aVolume)

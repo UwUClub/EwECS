@@ -125,7 +125,7 @@ namespace ECS::Asset {
                 _assets.erase(aPath);
             }
 
-            [[nodiscard]] bool hasAsset(const std::string &aPath) const
+            [[nodiscard]] bool hasAsset(const std::string &aPath)
             {
                 return _assets.find(aPath) != _assets.end();
             }
