@@ -19,12 +19,13 @@ namespace ECS {
         aAssetManager.registerAssetHandler<sf::SoundBuffer *>();
     }
 
-    void Sound::createSound(const std::string &aPath, bool aLoop, float aVolume)
+    void Sound::createSound(const std::string &aPath)
     {
         if (!Asset::AssetManager::getInstance().hasAsset<sf::Sound *>(aPath)) {
             auto *sound = new sf::Sound;
+            auto *buffer = new sf::SoundBuffer;
 
-            sound->setBuffer(*Asset::AssetManager::getInstance().getAsset<sf::SoundBuffer *>(aPath));
+            Asset::AssetManager::getInstance().addAsset<sf::SoundBuffer *>(aPath, buffer);
             Asset::AssetManager::getInstance().addAsset<sf::Sound *>(aPath, sound);
         }
     }
