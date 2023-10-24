@@ -1,4 +1,4 @@
-target_sources(ecs PUBLIC
+target_sources(ecs PRIVATE
     Sound.cpp
 )
 
