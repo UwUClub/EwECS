@@ -2,13 +2,31 @@
 #include <fstream>
 #include <iostream>
 
-void ConfigReader::loadConfig(const std::string &aJsonPath)
+ConfigReader::ConfigReader(const std::string &aJsonPath)
 {
-    std::ifstream f(aJsonPath);
-    _data = json::parse(f);
+    loadConfig(aJsonPath);
 }
 
-json &ConfigReader::get()
+void ConfigReader::loadConfig(const std::string &aJsonPath)
 {
-    return _data;
+    std::ifstream file(aJsonPath);
+
+    if (!file.is_open()) {
+        std::cerr << "Error: " << aJsonPath << " not found" << std::endl;
+        return;
+    }
+
+    try {
+        _data[aJsonPath] = json::parse(file);
+    } catch (const std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+}
+
+json &ConfigReader::get(const std::string &aConfigName)
+{
+    if (_data.find(aConfigName) == _data.end()) {
+        loadConfig(aConfigName);
+    }
+    return _data[aConfigName];
 }

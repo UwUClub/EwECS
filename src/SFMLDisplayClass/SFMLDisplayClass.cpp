@@ -9,16 +9,17 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Event.hpp>
+#include <algorithm>
 #include <functional>
+#include <iostream>
+#include "EwECS/Asset/AssetManager.hpp"
+#include "EwECS/ConfigReader/ConfigReader.hpp"
 #include "EwECS/Event/EventManager.hpp"
 #include "EwECS/Event/KeyboardEvent.hpp"
-#include <algorithm>
-#include <iostream>
-#include "EwECS/World.hpp"
 #include "EwECS/SFMLDisplayClass/LoadedSprite.hpp"
+#include "EwECS/SFMLDisplayClass/RenderPlugin.hpp"
 #include "EwECS/Utils.hpp"
-#include "EwECS/ConfigReader/ConfigReader.hpp"
-#include "EwECS/Asset/AssetManager.hpp"
+#include "EwECS/World.hpp"
 
 #if defined(__linux__)
     #include <libgen.h>
@@ -30,15 +31,17 @@ namespace ECS {
     SFMLDisplayClass::SFMLDisplayClass()
     {
         auto &configReader = ConfigReader::getInstance();
+        auto path = Render::RenderPluginConfig::getInstance()._configPath;
+
         configReader.loadConfig("assets/config/r-type.json");
-        auto &graphicsConf = configReader.get()["graphics"];
-        
+        auto &graphicsConf = configReader.get(path)["graphics"];
+
         _window.create(sf::VideoMode(graphicsConf["width"], graphicsConf["height"]), "R-Type");
         /*if (_window == nullptr) {
             std::cout << "Failed to create SFML window: " << std::endl;
             return;
         }*/
-    #if defined(__linux__)
+#if defined(__linux__)
         char result[PATH_MAX];
         ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
         if (count < 0 || count >= PATH_MAX) {
@@ -52,9 +55,9 @@ namespace ECS {
             return;
         }
         _assetPath = std::string(dir) + "/";
-    #else
+#else
         _assetPath = "./";
-    #endif
+#endif
     }
 
     sf::Texture *SFMLDisplayClass::getTexture(const std::string &aPath)
@@ -98,7 +101,7 @@ namespace ECS {
     }
 
     void SFMLDisplayClass::displayEntities(Core::SparseArray<Component::LoadedSprite> &aSprites,
-                                 Core::SparseArray<Utils::Vector2f> &aPos)
+                                           Core::SparseArray<Utils::Vector2f> &aPos)
     {
         SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
         const auto size = aSprites.size();
@@ -147,4 +150,4 @@ namespace ECS {
     {
         _window.close();
     }
-}
+} // namespace ECS

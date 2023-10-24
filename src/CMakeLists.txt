@@ -3,6 +3,7 @@ add_subdirectory(SFMLDisplayClass)
 add_subdirectory(ConfigReader)
 add_subdirectory(Asset)
 add_subdirectory(Sound)
+add_subdirectory(Physic)
 
 target_sources(ecs PRIVATE
     World.cpp
