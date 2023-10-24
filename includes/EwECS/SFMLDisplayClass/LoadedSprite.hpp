@@ -24,8 +24,8 @@ namespace Component {
              */
             LoadedSprite()
                 : texture(nullptr),
-                  rect(nullptr),
-                  srcRect(nullptr)
+                  rect(sf::IntRect(0, 0, 0, 0)),
+                  srcRect(sf::IntRect(0, 0, 0, 0))
             {}
             /**
              * @brief Construct a new Loaded Sprite object
@@ -35,7 +35,7 @@ namespace Component {
              * @param aTextureRect Size and position of the sprite in the texture
              * @param aDisplayRect Size and position of the sprite on the screen
              */
-            LoadedSprite(std::string aPath, sf::Texture *aTexture, sf::IntRect *aTextureRect, sf::IntRect *aDisplayRect)
+            LoadedSprite(std::string aPath, sf::Texture *aTexture, sf::IntRect &aTextureRect , sf::IntRect &aDisplayRect)
                 : path(std::move(aPath)),
                   texture(aTexture),
                   rect(aTextureRect),
@@ -50,7 +50,7 @@ namespace Component {
              * @param aTextureRect Size and position of the sprite in the texture
              * @param aDisplayRect Size and position of the sprite on the screen
              */
-            LoadedSprite(std::string aPath, sf::Texture *aTexture, sf::IntRect *aTextureRect, sf::IntRect *aDisplayRect,
+            LoadedSprite(std::string aPath, sf::Texture *aTexture, sf::IntRect &aTextureRect, sf::IntRect &aDisplayRect,
                          float aScale)
                 : path(std::move(aPath)),
                   texture(aTexture),
@@ -61,8 +61,8 @@ namespace Component {
 
             std::string path;
             sf::Texture *texture;
-            sf::IntRect *rect;
-            sf::IntRect *srcRect;
+            sf::IntRect rect;
+            sf::IntRect srcRect;
             float scale = 1.0;
     };
 } // namespace Component

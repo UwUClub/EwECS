@@ -2,9 +2,9 @@
 #include <fstream>
 #include <iostream>
 
-void ConfigReader::loadConfig()
+void ConfigReader::loadConfig(const std::string &aJsonPath)
 {
-    std::ifstream f(CONFIG_PATH);
+    std::ifstream f(aJsonPath);
     _data = json::parse(f);
 }
 

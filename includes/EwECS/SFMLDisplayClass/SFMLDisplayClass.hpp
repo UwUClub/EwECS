@@ -94,8 +94,6 @@ namespace ECS {
                 {sf::Keyboard::Key::Right, ECS::Event::KeyIdentifier::RIGHT},
                 {sf::Keyboard::Key::Space, ECS::Event::KeyIdentifier::SPACE},
             };
-
-            std::unordered_map<std::string, sf::Texture *> _textures;
             /**
              * @brief Construct a new SFMLDisplayClass object
              *
