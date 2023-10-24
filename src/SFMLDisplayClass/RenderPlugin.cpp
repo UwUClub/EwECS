@@ -18,5 +18,5 @@ void ECS::Render::RenderPlugin::plug(ECS::Core::World &aWorld, ECS::Asset::Asset
 {
     aWorld.registerComponent<Component::LoadedSprite>();
 
-    aAssetManager.RegisterAssetHandler<sf::Texture *>();
+    aAssetManager.registerAssetHandler<sf::Texture *>();
 }

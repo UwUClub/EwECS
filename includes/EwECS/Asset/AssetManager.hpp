@@ -65,7 +65,7 @@ namespace ECS::Asset {
              * @return AssetHandler<Asset>& The asset handler
              */
             template<Pointer Asset>
-            AssetHandler<Asset> &RegisterAssetHandler(std::function<void(Asset)> aDeleter = customDeleter<Asset>)
+            AssetHandler<Asset> &registerAssetHandler(std::function<void(Asset)> aDeleter = customDeleter<Asset>)
             {
                 auto typeIndex = std::type_index(typeid(Asset));
 
@@ -85,7 +85,7 @@ namespace ECS::Asset {
              */
             template<NonPointer Asset>
             AssetHandler<Asset> &
-            RegisterAssetHandler(std::function<void(const Asset &)> aDeleter = customDeleter<Asset>)
+            registerAssetHandler(std::function<void(const Asset &)> aDeleter = customDeleter<Asset>)
             {
                 auto typeIndex = std::type_index(typeid(Asset));
 
