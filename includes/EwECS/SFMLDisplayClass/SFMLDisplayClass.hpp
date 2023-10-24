@@ -14,10 +14,10 @@
     #include <SFML/Window/Window.hpp>
     #include <cstddef>
     #include <string>
-    #include "../Event/KeyboardEvent.hpp"
-    #include "../Utils.hpp"
-    #include "../World.hpp"
-    #include "LoadedSprite.hpp"
+    #include "EwECS/Event/KeyboardEvent.hpp"
+    #include "EwECS/Utils.hpp"
+    #include "EwECS/World.hpp"
+    #include "EwECS/SFMLDisplayClass/LoadedSprite.hpp"
     #include <unordered_map>
 
 namespace ECS {

@@ -1,4 +1,4 @@
-#include "WindowEvent.hpp"
+#include "EwECS/Event/WindowEvent.hpp"
 
 // -------------------CONSTRUCTORS / DESTRUCTOR-------------------//
 ECS::Event::WindowEvent::WindowEvent(const int &aWidth, const int &aHeight, const int &aX, const int &aY,
