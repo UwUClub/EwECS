@@ -61,10 +61,23 @@ namespace ECS {
             * @brief Get the player input
             * 
             */
-            void getInput();
+            static void getInput();
 
-            void displayEntities(Core::SparseArray<Component::LoadedSprite> &aSprites,
+            /**
+             * @brief Display all the entities of the game
+             * 
+             * @param aSprites SparseArray of all the sprites
+             * @param aPos SparseArray of all the positions
+             */
+            static void displayEntities(Core::SparseArray<Component::LoadedSprite> &aSprites,
                                  Core::SparseArray<Utils::Vector2f> &aPos);
+
+            /**
+             * @brief Load all the textures of the game
+             * 
+             * @param aSprites SparseArray of all the sprites
+             */
+            static void loadTextures(Core::SparseArray<Component::LoadedSprite> &aSprites);
 
             sf::RenderWindow _window;
             std::string _assetPath;
