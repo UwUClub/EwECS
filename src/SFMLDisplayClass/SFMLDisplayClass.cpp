@@ -18,6 +18,8 @@
 #include "EwECS/SFMLDisplayClass/LoadedSprite.hpp"
 #include "EwECS/Utils.hpp"
 #include "EwECS/ConfigReader/ConfigReader.hpp"
+#include "EwECS/Asset/AssetManager.hpp"
+
 #if defined(__linux__)
     #include <libgen.h>
     #include <limits.h>
@@ -28,7 +30,7 @@ namespace ECS {
     SFMLDisplayClass::SFMLDisplayClass()
     {
         auto &configReader = ConfigReader::getInstance();
-        configReader.loadConfig();
+        configReader.loadConfig("assets/config/r-type.json");
         auto &graphicsConf = configReader.get()["graphics"];
         
         _window.create(sf::VideoMode(graphicsConf["width"], graphicsConf["height"]), "R-Type");
@@ -59,30 +61,18 @@ namespace ECS {
     {
         std::string path = _assetPath + aPath;
         auto *texture = new sf::Texture();
+        auto &assetManager = ECS::Asset::AssetManager::getInstance();
 
-        if (_textures.find(path) == _textures.end()) {
+        if (!assetManager.hasAsset<sf::Texture *>(path)) {
             if (texture->loadFromFile(path.c_str())) {
-                _textures[path] = texture;
+                assetManager.addAsset<sf::Texture *>(path, texture);
+                return assetManager.getAsset<sf::Texture *>(path);
             }
-            if (_textures[path] == nullptr) {
-                std::cerr << "Failed to create texture" << std::endl;
-                delete texture;
-                return nullptr;
-            }
+            std::cerr << "Failed to create texture" << std::endl;
+            assetManager.removeAsset<sf::Texture *>(path);
+            return nullptr;
         }
-        return _textures[path];
-    }
-
-    void SFMLDisplayClass::freeRects(const std::size_t &aIdx)
-    {
-        auto &world = ECS::Core::World::getInstance();
-        auto &sprites = world.getComponent<Component::LoadedSprite>();
-
-        if (!sprites[aIdx].has_value()) {
-            return;
-        }
-        delete sprites[aIdx]->rect;
-        delete sprites[aIdx]->srcRect;
+        return assetManager.getAsset<sf::Texture *>(path);
     }
 
     void SFMLDisplayClass::getInput()
@@ -125,11 +115,11 @@ namespace ECS {
             auto &spriteData = aSprites[i].value();
             auto &pos = aPos[i].value();
 
-            if (spriteData.srcRect != nullptr) {
+            if (spriteData.srcRect != sf::IntRect(0, 0, 0, 0)) {
                 sf::Sprite sprite;
 
                 sprite.setTexture(*spriteData.texture);
-                sprite.setTextureRect(*spriteData.rect);
+                sprite.setTextureRect(spriteData.rect);
                 sprite.setPosition(pos.x, pos.y);
                 sprite.scale(spriteData.scale, spriteData.scale);
                 display._window.draw(sprite);
@@ -155,19 +145,6 @@ namespace ECS {
 
     SFMLDisplayClass::~SFMLDisplayClass()
     {
-        auto &world = ECS::Core::World::getInstance();
-        auto &sprites = world.getComponent<Component::LoadedSprite>();
-
-        for (auto &sprite : sprites) {
-            if (!sprite.has_value()) {
-                continue;
-            }
-            delete sprite->rect;
-            delete sprite->srcRect;
-        }
-        for (auto &texture : _textures) {
-            delete texture.second;
-        }
         _window.close();
     }
 }

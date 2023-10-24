@@ -24,6 +24,10 @@ namespace ECS::Render {
             ~RenderPluginConfig() final;
 
             void load(const std::string &aJsonPath) final;
+
+            std::string _windowName;
+            std::size_t _windowWidth;
+            std::size_t _windowHeight;
     };
 
     class RenderPlugin final : public ECS::Plugin::IPlugin

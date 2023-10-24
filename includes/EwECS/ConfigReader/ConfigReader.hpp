@@ -4,7 +4,7 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
-static const std::string CONFIG_PATH = "config/flappybird.json";
+static const std::string CONFIG_PATH = "assets/config/r-type.json";
 
 /**
  * @brief ConfigReader class is used to read the config files
@@ -43,7 +43,7 @@ class ConfigReader
          * @brief Load the config file
          *
          */
-        void loadConfig();
+        void loadConfig(const std::string &jsonPath);
 
         /**
          * @brief Get all the config
