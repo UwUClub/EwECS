@@ -17,6 +17,7 @@ target_link_libraries(ecs
         sfml-graphics
         sfml-window
         sfml-system
+        sfml-audio
         nlohmann_json
 )
 
