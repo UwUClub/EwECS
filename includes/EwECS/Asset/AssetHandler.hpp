@@ -73,12 +73,12 @@ namespace ECS::Asset {
              * @param asset the asset
              */
             template<Pointer AssetPtr>
-            void addAsset(const std::string &path, AssetPtr asset)
+            void addAsset(const std::string &aPath, AssetPtr aAsset)
             {
-                if (_assets.find(path) != _assets.end()) {
+                if (_assets.find(aPath) != _assets.end()) {
                     return;
                 }
-                _assets[path] = asset;
+                _assets[aPath] = aAsset;
             }
 
             /**
@@ -89,12 +89,12 @@ namespace ECS::Asset {
              * @param asset the asset
              */
             template<NonPointer AssetRef>
-            void addAsset(const std::string &path, Asset &&asset)
+            void addAsset(const std::string &aPath, Asset &&aAsset)
             {
-                if (_assets.find(path) != _assets.end()) {
+                if (_assets.find(aPath) != _assets.end()) {
                     return;
                 }
-                _assets.emplace(path, std::move(asset));
+                _assets.emplace(aPath, std::move(aAsset));
             }
 
             /**
@@ -103,12 +103,12 @@ namespace ECS::Asset {
              * @param path the path to the asset
              * @return Asset& the asset
              */
-            Asset &getAsset(const std::string &path)
+            Asset &getAsset(const std::string &aPath)
             {
-                if (_assets.find(path) == _assets.end()) {
+                if (_assets.find(aPath) == _assets.end()) {
                     throw AssetHandlerException("Asset not found");
                 }
-                return _assets[path];
+                return _assets[aPath];
             }
 
             /**
@@ -116,13 +116,13 @@ namespace ECS::Asset {
              *
              * @param path the path to the asset
              */
-            void removeAsset(const std::string &path)
+            void removeAsset(const std::string &aPath)
             {
-                if (_assets.find(path) == _assets.end()) {
+                if (_assets.find(aPath) == _assets.end()) {
                     throw AssetHandlerException("Asset not found");
                 }
-                _deleter(_assets[path]);
-                _assets.erase(path);
+                _deleter(_assets[aPath]);
+                _assets.erase(aPath);
             }
 
             /**
@@ -138,10 +138,10 @@ namespace ECS::Asset {
             }
 
         private:
-            static void customDeleter(Asset asset)
+            static void customDeleter(Asset aAsset)
             {
                 if constexpr (std::is_pointer_v<Asset>) {
-                    delete asset;
+                    delete aAsset;
                 }
             }
 
