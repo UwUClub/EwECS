@@ -65,7 +65,7 @@ namespace ECS::Asset {
              * @return AssetHandler<Asset>& The asset handler
              */
             template<Pointer Asset>
-            AssetHandler<Asset> &RegisterAssetHandler(std::function<void(Asset)> aDeleter)
+            AssetHandler<Asset> &registerAssetHandler(std::function<void(Asset)> aDeleter = customDeleter<Asset>)
             {
                 auto typeIndex = std::type_index(typeid(Asset));
 
@@ -84,7 +84,8 @@ namespace ECS::Asset {
              * @return AssetHandler<Asset>& The asset handler
              */
             template<NonPointer Asset>
-            AssetHandler<Asset> &RegisterAssetHandler(std::function<void(const Asset &)> aDeleter)
+            AssetHandler<Asset> &
+            registerAssetHandler(std::function<void(const Asset &)> aDeleter = customDeleter<Asset>)
             {
                 auto typeIndex = std::type_index(typeid(Asset));
 
@@ -188,6 +189,24 @@ namespace ECS::Asset {
                     getAssetHandler<Asset>().clear();
                 } catch (const std::exception &e) {
                     throw AssetManagerException(e.what());
+                }
+            }
+
+            template<typename Asset>
+            [[nodiscard]] bool hasAsset(const std::string &aPath) const
+            {
+                try {
+                    return getAssetHandler<Asset>().hasAsset(aPath);
+                } catch (const std::exception &e) {
+                    throw AssetManagerException(e.what());
+                }
+            }
+
+            template<typename Asset>
+            static void customDeleter(Asset aAsset)
+            {
+                if constexpr (std::is_pointer_v<Asset>) {
+                    delete aAsset;
                 }
             }
 
