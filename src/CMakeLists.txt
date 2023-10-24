@@ -7,6 +7,7 @@ add_subdirectory(Sound)
 target_sources(ecs PRIVATE
     World.cpp
     Utils.cpp
+    Logger.cpp
     )
 
 target_link_libraries(ecs
