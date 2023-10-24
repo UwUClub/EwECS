@@ -32,14 +32,15 @@ namespace Component {
              *
              * @param aPath path to the sprite
              * @param aTexture texture of the sprite (once loaded)
-             * @param aTextureRect Size and position of the sprite in the texture
-             * @param aDisplayRect Size and position of the sprite on the screen
+             * @param aLeft left position of the sprite in the texture
+              * @param aTop top position of the sprite in the texture
+              * @param aWidth width of the sprite in the texture
+              * @param aHeight height of the sprite in the texture
              */
-            LoadedSprite(std::string aPath, sf::Texture *aTexture, sf::IntRect &aTextureRect , sf::IntRect &aDisplayRect)
+            LoadedSprite(std::string aPath, sf::Texture *aTexture, int aLeft, int aTop, int aWidth, int aHeight)
                 : path(std::move(aPath)),
                   texture(aTexture),
-                  rect(aTextureRect),
-                  srcRect(aDisplayRect)
+                  rect(sf::IntRect{aLeft, aTop, aWidth, aHeight})
             {}
 
             /**
@@ -47,15 +48,16 @@ namespace Component {
              *
              * @param aPath path to the sprite
              * @param aTexture texture of the sprite (once loaded)
-             * @param aTextureRect Size and position of the sprite in the texture
-             * @param aDisplayRect Size and position of the sprite on the screen
+             * @param aLeft left position of the sprite in the texture
+             * @param aTop top position of the sprite in the texture
+             * @param aWidth width of the sprite in the texture
+             * @param aHeight height of the sprite in the texture
+             * @param aScale scale of the sprite
              */
-            LoadedSprite(std::string aPath, sf::Texture *aTexture, sf::IntRect &aTextureRect, sf::IntRect &aDisplayRect,
-                         float aScale)
+            LoadedSprite(std::string aPath, sf::Texture *aTexture, int aLeft, int aTop, int aWidth, int aHeight, float aScale)
                 : path(std::move(aPath)),
                   texture(aTexture),
-                  rect(aTextureRect),
-                  srcRect(aDisplayRect),
+                  rect(sf::IntRect{aLeft, aTop, aWidth, aHeight}),
                   scale(aScale)
             {}
 
