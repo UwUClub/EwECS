@@ -3,6 +3,7 @@ add_subdirectory(SFMLDisplayClass)
 add_subdirectory(ConfigReader)
 add_subdirectory(Asset)
 add_subdirectory(Sound)
+add_subdirectory(Physic)
 
 target_sources(ecs PRIVATE
     World.cpp
@@ -16,6 +17,7 @@ target_link_libraries(ecs
         sfml-graphics
         sfml-window
         sfml-system
+        sfml-audio
         nlohmann_json
 )
 

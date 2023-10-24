@@ -15,8 +15,11 @@ namespace ECS::Render {
 
     class RenderPluginConfig final : public ECS::Plugin::IConfigPlugin
     {
+        private:
+            RenderPluginConfig();
+
         public:
-            explicit RenderPluginConfig(const std::string &aJsonPath);
+            static RenderPluginConfig &getInstance();
             RenderPluginConfig(RenderPluginConfig &&) = default;
             RenderPluginConfig(const RenderPluginConfig &) = default;
             RenderPluginConfig &operator=(RenderPluginConfig &&) = default;
@@ -28,13 +31,13 @@ namespace ECS::Render {
             std::string _windowName;
             std::size_t _windowWidth;
             std::size_t _windowHeight;
+            std::string _configPath;
     };
 
     class RenderPlugin final : public ECS::Plugin::IPlugin
     {
         public:
             RenderPlugin();
-            explicit RenderPlugin(RenderPluginConfig &aConfig);
             RenderPlugin(RenderPlugin &&) = delete;
             RenderPlugin(const RenderPlugin &) = delete;
             RenderPlugin &operator=(RenderPlugin &&) = delete;
@@ -44,7 +47,6 @@ namespace ECS::Render {
             void plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager) final;
 
         private:
-            RenderPluginConfig _config;
     };
 } // namespace ECS::Render
 

@@ -4,6 +4,7 @@ add_subdirectory(ConfigReader)
 add_subdirectory(Asset)
 add_subdirectory(Components)
 add_subdirectory(Sound)
+add_subdirectory(Physic)
 
 target_sources(ecs PUBLIC
     EwECS.hpp
