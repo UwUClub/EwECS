@@ -2,7 +2,7 @@
 // Created by beafowl on 24/10/23.
 //
 
-#ifndef EWECS_COMPONENTS_SOUND_HPP
+#ifndef EWECS_SOUND_HPP
     #define EWECS_SOUND_HPP
 
     #include <string>
