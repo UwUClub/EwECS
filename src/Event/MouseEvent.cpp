@@ -1,4 +1,4 @@
-#include "MouseEvent.hpp"
+#include "EwECS/Event/MouseEvent.hpp"
 
 // -------------------CONSTRUCTORS / DESTRUCTOR-------------------//
 ECS::Event::MouseEvent::MouseEvent(const int &aX, const int &aY, const MouseButton &aButton, const MouseState &aState,

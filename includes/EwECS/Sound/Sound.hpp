@@ -6,7 +6,7 @@
     #define EWECS_SOUND_HPP
 
     #include <string>
-    #include "IPlugin.hpp"
+    #include "EwECS/IPlugin.hpp"
 
 namespace ECS {
     class Sound : ECS::Plugin::IPlugin

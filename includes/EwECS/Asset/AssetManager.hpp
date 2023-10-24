@@ -12,7 +12,7 @@
 #include <functional>
 #include <string>
 #include <typeindex>
-#include "AssetHandler.hpp"
+#include "EwECS/Asset/AssetHandler.hpp"
 #include <unordered_map>
 
 namespace ECS::Asset {

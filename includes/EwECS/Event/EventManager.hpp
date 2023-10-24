@@ -9,8 +9,9 @@
 #include <string>
 #include <typeindex>
 #include <vector>
-#include "EventHandler.hpp"
+#include "EwECS/Event/EventHandler.hpp"
 #include <unordered_map>
+
 namespace ECS::Event {
     /**
      * @brief EventManager class is a singleton that manage all events

@@ -2,13 +2,11 @@
 // Created by beafowl on 24/10/23.
 //
 
-#include "Sound.hpp"
+#include "EwECS/Sound/Sound.hpp"
 #include <SFML/Audio.hpp>
-#include <iostream>
-#include "Asset/AssetHandler.hpp"
-#include "AssetManager.hpp"
-#include "World.hpp"
-#include "Components/Components+Sounds.hpp"
+#include "EwECS/Asset/AssetManager.hpp"
+#include "EwECS/World.hpp"
+#include "EwECS/Components/Components+Sounds.hpp"
 
 namespace ECS {
     void Sound::plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager)

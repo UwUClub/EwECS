@@ -7,6 +7,7 @@
 
 #ifndef ASSETHANDLER_HPP_
 #define ASSETHANDLER_HPP_
+
 #include <algorithm>
 #include <functional>
 #include <iostream>

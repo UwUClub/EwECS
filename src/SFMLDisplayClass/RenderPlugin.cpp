@@ -1,8 +1,8 @@
-#include "RenderPlugin.hpp"
-#include "AssetManager.hpp"
-#include "LoadedSprite.hpp"
+#include "EwECS/SFMLDisplayClass/RenderPlugin.hpp"
+#include "EwECS/Asset/AssetManager.hpp"
+#include "EwECS/SFMLDisplayClass/LoadedSprite.hpp"
 #include "SFML/Graphics/Texture.hpp"
-#include "World.hpp"
+#include "EwECS/World.hpp"
 
 ECS::Render::RenderPlugin::RenderPlugin()
     : _config(RENDER_PLUGIN_CONFIG_BASE)

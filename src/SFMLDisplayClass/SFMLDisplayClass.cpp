@@ -5,20 +5,19 @@
 ** SFMLDisplayClass
 */
 
-#include "SFMLDisplayClass.hpp"
+#include "EwECS/SFMLDisplayClass/SFMLDisplayClass.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
 #include <functional>
-#include "EventManager.hpp"
-#include "KeyboardEvent.hpp"
+#include "EwECS/Event/EventManager.hpp"
+#include "EwECS/Event/KeyboardEvent.hpp"
 #include <algorithm>
 #include <iostream>
-#include "World.hpp"
-#include "LoadedSprite.hpp"
-#include "Utils.hpp"
-#include "ConfigReader.hpp"
+#include "EwECS/World.hpp"
+#include "EwECS/SFMLDisplayClass/LoadedSprite.hpp"
+#include "EwECS/Utils.hpp"
+#include "EwECS/ConfigReader/ConfigReader.hpp"
 #if defined(__linux__)
     #include <libgen.h>
     #include <limits.h>

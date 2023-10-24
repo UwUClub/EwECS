@@ -20,7 +20,7 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#include "SparseArray.hpp"
+#include "EwECS/SparseArray.hpp"
 #include <unordered_map>
 
 namespace ECS::Core {

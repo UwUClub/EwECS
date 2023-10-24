@@ -2,7 +2,7 @@
 // Created by beafowl on 24/10/23.
 //
 
-#include "SoundEvent.hpp"
+#include "EwECS/Event/SoundEvent.hpp"
 
 namespace ECS::Event {
     // -------------------CONSTRUCTORS / DESTRUCTOR-------------------//

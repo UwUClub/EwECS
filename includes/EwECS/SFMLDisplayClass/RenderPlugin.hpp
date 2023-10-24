@@ -7,7 +7,8 @@
 
 #ifndef RENDERPLUGIN_HPP_
 #define RENDERPLUGIN_HPP_
-#include "IPlugin.hpp"
+
+#include "EwECS/IPlugin.hpp"
 
 namespace ECS::Render {
     static const std::string RENDER_PLUGIN_CONFIG_BASE = "RenderPlugin";

@@ -1,7 +1,7 @@
 #ifndef MOUSEEVENT_HPP
 #define MOUSEEVENT_HPP
 
-#include "../Utils.hpp"
+#include "EwECS/Utils.hpp"
 
 namespace ECS::Event {
 
