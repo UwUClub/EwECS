@@ -11,6 +11,8 @@ log_*
 CMakeUserPresets.json
 CMakeCache.txt
 CMakeFiles/
+release/
+debug/
 
 # IDE files
 .vs/
