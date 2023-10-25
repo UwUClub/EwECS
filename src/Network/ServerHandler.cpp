@@ -66,12 +66,12 @@ namespace ECS::Network {
         _onReceiveAknowledgment(client->first);
     }
 
-    void ServerHandler::onReceive(ServerReceiveCallback &aCallback)
+    void ServerHandler::onReceive(ServerReceiveCallback aCallback)
     {
         _onReceive = aCallback;
     }
 
-    void ServerHandler::onReceiveAknowledgment(ServerReceiveAknowledgmentCallback &aCallback)
+    void ServerHandler::onReceiveAknowledgment(ServerReceiveAknowledgmentCallback aCallback)
     {
         _onReceiveAknowledgment = aCallback;
     }

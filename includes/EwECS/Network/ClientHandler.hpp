@@ -59,7 +59,7 @@ namespace ECS::Network {
              * @brief Set the on receive callback
              * @param aOnReceive The callback to set
              */
-            void onReceive(ClientReceiveCallback &aOnReceive);
+            void onReceive(ClientReceiveCallback aOnReceive);
 
             /**
              * @brief Send a packet to the server

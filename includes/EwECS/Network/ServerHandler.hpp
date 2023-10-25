@@ -77,13 +77,13 @@ namespace ECS::Network {
              * @brief Set the on receive callback
              * @param aOnReceive The callback to set
              */
-            void onReceive(ServerReceiveCallback &);
+            void onReceive(ServerReceiveCallback);
 
             /**
              * @brief Set the on receive aknowledgment callback
              * @param aOnReceiveAknowledgment The callback to set
              */
-            void onReceiveAknowledgment(ServerReceiveAknowledgmentCallback &);
+            void onReceiveAknowledgment(ServerReceiveAknowledgmentCallback);
 
             /**
              * @brief Register a client to the server

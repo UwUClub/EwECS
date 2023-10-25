@@ -15,7 +15,7 @@ namespace ECS::Network {
         : _resolver(udp::resolver(NetworkHandler::getInstance().getIoService()))
     {}
 
-    void ClientHandler::onReceive(ClientReceiveCallback &aOnReceive)
+    void ClientHandler::onReceive(ClientReceiveCallback aOnReceive)
     {
         _onReceive = aOnReceive;
     }
