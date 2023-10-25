@@ -43,8 +43,8 @@ add_library(EwECS::EwECS_warnings ALIAS EwECS_warnings)
 
 add_library(ecs STATIC)
 
-add_subdirectory(includes)
 add_subdirectory(src)
+add_subdirectory(includes)
 
 #export the includes
 target_include_directories(ecs PUBLIC
