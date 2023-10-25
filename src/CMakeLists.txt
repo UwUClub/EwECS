@@ -4,6 +4,7 @@ add_subdirectory(ConfigReader)
 add_subdirectory(Asset)
 add_subdirectory(Sound)
 add_subdirectory(Physic)
+add_subdirectory(Network)
 
 target_sources(ecs PRIVATE
     World.cpp
@@ -19,6 +20,10 @@ target_link_libraries(ecs
         sfml-system
         sfml-audio
         nlohmann_json
+        ${Boost_LIBRARIES}
+        Boost::asio
+        Boost::thread
+        Boost::uuid
 )
 
 target_include_directories(ecs PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
