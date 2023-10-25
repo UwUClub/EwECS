@@ -45,7 +45,7 @@ class ConfigReader
          * @brief Load the config file
          *
          */
-        void loadConfig(const std::string &jsonPath);
+        json &loadConfig(const std::string &jsonPath);
 
         /**
          * @brief Get all the config

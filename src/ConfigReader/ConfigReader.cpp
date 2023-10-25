@@ -7,19 +7,25 @@ ConfigReader::ConfigReader(const std::string &aJsonPath)
     loadConfig(aJsonPath);
 }
 
-void ConfigReader::loadConfig(const std::string &aJsonPath)
+json &ConfigReader::loadConfig(const std::string &aJsonPath)
 {
     std::ifstream file(aJsonPath);
 
     if (!file.is_open()) {
         std::cerr << "Error: " << aJsonPath << " not found" << std::endl;
-        return;
+        throw std::runtime_error("Config file not found");
+    }
+
+    if (_data.find(aJsonPath) != _data.end()) {
+        return _data[aJsonPath];
     }
 
     try {
         _data[aJsonPath] = json::parse(file);
+        return _data[aJsonPath];
     } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
+        throw std::runtime_error("Config file not found");
     }
 }
 

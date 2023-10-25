@@ -10,9 +10,8 @@
 void ECS::Render::RenderPluginConfig::load(const std::string &aJsonPath)
 {
     auto &configReader = ConfigReader::getInstance();
-    configReader.loadConfig(aJsonPath);
     try {
-        auto &graphicsConf = configReader.get(aJsonPath)["graphics"];
+        auto &graphicsConf = configReader.loadConfig(aJsonPath)["graphics"];
 
         _windowName = graphicsConf["name"];
         _windowWidth = graphicsConf["width"];
@@ -20,7 +19,6 @@ void ECS::Render::RenderPluginConfig::load(const std::string &aJsonPath)
         _configPath = aJsonPath;
     } catch (std::exception &e) {
         std::cerr << "Failed to load config: " << e.what() << std::endl;
-        _configPath = "";
     }
 }
 

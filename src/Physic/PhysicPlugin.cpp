@@ -11,9 +11,8 @@
 void ECS::Physic::PhysicPluginConfig::load(const std::string &aJsonPath)
 {
     auto &configReader = ConfigReader::getInstance();
-    configReader.loadConfig(aJsonPath);
     try {
-        auto &physicConf = configReader.get(aJsonPath)["physics"];
+        auto &physicConf = configReader.loadConfig(aJsonPath)["physics"];
 
         _configPath = aJsonPath;
         _gravity = static_cast<float>(physicConf["gravity"]);
@@ -21,10 +20,6 @@ void ECS::Physic::PhysicPluginConfig::load(const std::string &aJsonPath)
 
     } catch (std::exception &e) {
         std::cerr << "Failed to load config: " << e.what() << std::endl;
-
-        _configPath = "";
-        _gravity = 2;
-        _initialJumpVelocity = 2;
     }
 }
 
