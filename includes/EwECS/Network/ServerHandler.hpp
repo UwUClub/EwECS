@@ -160,6 +160,11 @@ namespace ECS::Network {
              * @return true if the server is full, false otherwise
              */
             [[nodiscard]] bool isFull() const;
+
+            /**
+             * @brief Stop the server
+             */
+            void stop();
     };
 
 } // namespace ECS::Network

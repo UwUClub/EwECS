@@ -77,6 +77,11 @@ namespace ECS::Network {
             {
                 NetworkHandler::getInstance().send<Payload>(aType, aPayload, _serverEndpoint);
             }
+
+            /**
+             * @brief Stop the client
+             */
+            void stop();
     };
 
 } // namespace ECS::Network

@@ -43,4 +43,9 @@ namespace ECS::Network {
         NetworkHandler::getInstance().send(aType, _serverEndpoint);
     }
 
+    void ClientHandler::stop()
+    {
+        NetworkHandler::getInstance().stop();
+    }
+
 } // namespace ECS::Network

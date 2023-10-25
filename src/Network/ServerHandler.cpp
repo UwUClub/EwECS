@@ -106,4 +106,9 @@ namespace ECS::Network {
         return _clients.size() >= _maxClients;
     }
 
+    void ServerHandler::stop()
+    {
+        NetworkHandler::getInstance().stop();
+    }
+
 } // namespace ECS::Network
