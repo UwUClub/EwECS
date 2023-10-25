@@ -31,6 +31,11 @@ namespace ECS::Network {
 
         _maxClients = aMaxClients;
 
+        _clientIds = std::vector<size_t>(aMaxClients);
+        for (int i = 0; i < aMaxClients; i++) {
+            _clientIds[i] = -1;
+        }
+
         network.start(endpoint.protocol(), aPacketFactory);
         network.bind(endpoint);
         std::cout << "Server " << endpoint << " listening" << std::endl;
@@ -81,13 +86,34 @@ namespace ECS::Network {
         if (_waitingQueue.size() > 0) {
             _clients[aClientId] = *_waitingQueue[0];
             _waitingQueue.erase(_waitingQueue.begin());
+
+            for (unsigned short i = 0; i < _maxClients; i++) {
+                if (_clientIds[i] == -1) {
+                    _clientIds[i] = aClientId;
+                }
+            }
             std::cout << "Player " << aClientId << " joined" << std::endl;
         }
+    }
+
+    int ServerHandler::getClientSeat(size_t aClientId)
+    {
+        for (int i = 0; i < _maxClients; i++) {
+            if (_clientIds[i] == aClientId) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     void ServerHandler::removeClient(size_t aClientId)
     {
         _clients.erase(aClientId);
+        for (int i = 0; i < _maxClients; i++) {
+            if (_clientIds[i] == aClientId) {
+                _clientIds[i] = -1;
+            }
+        }
     }
 
     int ServerHandler::getNumberClients() const

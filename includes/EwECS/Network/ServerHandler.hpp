@@ -27,6 +27,7 @@ namespace ECS::Network {
             ServerReceiveCallback _onReceive;
             ServerReceiveAknowledgmentCallback _onReceiveAknowledgment;
             unsigned short _maxClients = 0;
+            std::vector<size_t> _clientIds;
 
             /**
              * @brief Launch the server
@@ -90,6 +91,13 @@ namespace ECS::Network {
              * @param aClientId The id of the client
              */
             void addClient(unsigned short);
+
+            /**
+             * @brief Get the seat of a client in the server
+             * @param aClientId The id of the client
+             * @return int The seat of the client
+             */
+            int getClientSeat(size_t);
 
             /**
              * @brief Remove a client from the server
