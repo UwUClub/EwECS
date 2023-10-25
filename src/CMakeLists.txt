@@ -12,7 +12,7 @@ target_sources(ecs PRIVATE
     )
 
 target_link_libraries(ecs
-        PRIVATE
+        PUBLIC
         EwECS::EwECS_warnings
         sfml-graphics
         sfml-window
