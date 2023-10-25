@@ -14,10 +14,4 @@ target_sources(ecs PUBLIC
     IPlugin.hpp
 )
 
-target_link_libraries(
-    ecs
-    PUBLIC
-    nlohmann_json
-)
-
 target_include_directories(ecs PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
