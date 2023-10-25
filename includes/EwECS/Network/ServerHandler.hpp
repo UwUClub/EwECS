@@ -164,6 +164,25 @@ namespace ECS::Network {
             }
 
             /**
+             * @brief Broadcast a message to all clients except one. Each client receives a packet with a unique uuid.
+             * @param aType The packet type to send
+             * @param aPayload The payload to send
+             * @param aConnections Connection components of clients
+             * @param aExcludedClientId The id of the client to not send the message to
+             */
+            template<typename Payload>
+            void broadcastExcept(int8_t aType, Payload &aPayload,
+                                 ECS::Core::SparseArray<Component::Connection> &aConnection,
+                                 unsigned short aExcludedClientId)
+            {
+                for (auto &client : _clients) {
+                    if (client.first != aExcludedClientId) {
+                        send(aType, aPayload, client.first, aConnection);
+                    }
+                }
+            }
+
+            /**
              * @brief Check if the server is full
              * @return true if the server is full, false otherwise
              */
