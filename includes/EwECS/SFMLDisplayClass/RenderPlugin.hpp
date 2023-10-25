@@ -11,8 +11,6 @@
 #include "EwECS/IPlugin.hpp"
 
 namespace ECS::Render {
-    static const std::string RENDER_PLUGIN_CONFIG_BASE = "RenderPlugin";
-
     class RenderPluginConfig final : public ECS::Plugin::IConfigPlugin
     {
         private:

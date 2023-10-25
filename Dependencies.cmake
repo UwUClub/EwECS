@@ -4,6 +4,8 @@ include(FetchContent)
 # CMAKE_CXX_FLAGS don't propagate out to other
 # targets
 function(EwECS_setup_dependencies)
+    set(BUILD_SHARED_LIBS OFF)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
     set(FETCHCONTENT_QUIET FALSE)
 
     FetchContent_Declare(

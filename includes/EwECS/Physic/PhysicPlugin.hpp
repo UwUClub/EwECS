@@ -16,8 +16,6 @@
 #include "EwECS/Utils.hpp"
 
 namespace ECS::Physic {
-    static const std::string PHYSIC_PLUGIN_CONFIG_BASE = "config/Gravity.json";
-
     class PhysicPluginConfig final : public ECS::Plugin::IConfigPlugin
     {
         public:
