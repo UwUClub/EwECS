@@ -90,12 +90,12 @@ void ECS::Physic::PhysicPlugin::plug(ECS::Core::World &aWorld, ECS::Asset::Asset
     try {
         aWorld.registerComponent<Component::Weight>();
     } catch (std::exception &e) {
-        Logger::error(e.whxat());
+        Logger::error(e.what());
     }
     try {
         aWorld.registerComponent<Utils::Vector2f>();
     } catch (std::exception &e) {
-        Logger::error(e.whxat());
+        Logger::error(e.what());
     }
 
     aWorld.addSystem<ECS::Utils::Vector2f, Component::HitBox>(checkCollision);

@@ -5,8 +5,6 @@
 #include <unordered_map>
 using json = nlohmann::json;
 
-static const std::string CONFIG_PATH = "assets/config/r-type.json";
-
 /**
  * @brief ConfigReader class is used to read the config files
  */
