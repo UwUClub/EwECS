@@ -1,0 +1,86 @@
+name: ci
+on:
+  [push, pull_request]
+
+env:
+  CLANG_TIDY_VERSION: "15.0.2"
+  VERBOSE: 1
+
+jobs:
+  Test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:
+          - ubuntu-20.04
+          - windows-2019
+        compiler:
+          - llvm-15.0.2
+          - gcc-11
+        generator:
+          - "Ninja Multi-Config"
+        build_shared:
+          - OFF
+
+        exclude:
+          - os: windows-2019
+            compiler: gcc-11
+          - os: ubuntu-20.04
+            compiler: llvm-15.0.2
+
+        include:
+          # Add appropriate variables for gcov version required. This will intentionally break
+          # if you try to use a compiler that does not have gcov set
+          - compiler: gcc-11
+            gcov_executable: gcov
+            enable_ipo: On
+
+          - compiler: llvm-15.0.2
+            enable_ipo: Off
+            gcov_executable: "llvm-cov gcov"
+
+          - os: windows-2022
+            compiler: msvc
+            generator: "Visual Studio 17 2022"
+            enable_ipo: On
+
+
+    steps:
+      - name: Check for llvm version mismatches
+        if: ${{ contains(matrix.compiler, 'llvm') && !contains(matrix.compiler, env.CLANG_TIDY_VERSION) }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('There is a mismatch between configured llvm compiler and clang-tidy version chosen')
+
+      - uses: actions/checkout@v3
+
+      - name: Setup Cpp
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+          cmake: true
+          ninja: true
+          vcpkg: false
+          ccache: true
+          clangtidy: ${{ env.CLANG_TIDY_VERSION }}
+          cppcheck: true
+          gcovr: true
+          opencppcoverage: true
+
+      - name: Install xrand
+        if: runner.os != 'Windows'
+        run: |
+          sudo apt-get install -y freeglut3-dev libfreetype6-dev libx11-dev libxrandr-dev libudev-dev libgl1-mesa-dev libflac-dev libogg-dev libvorbis-dev libvorbisenc2 libvorbisfile3 libopenal-dev libpthread-stubs0-dev xorg-dev
+
+      - name: Configure CMake
+        run: |
+          cmake -S . -B ./build -G "${{matrix.generator}}" -D${{ env.PROJECT_NAME }}_ENABLE_IPO=${{matrix.enable_ipo }} -DCMAKE_BUILD_TYPE:STRING=Release -D${{ env.PROJECT_NAME }}_PACKAGING_MAINTAINER_MODE:BOOL=False -D${{ env.PROJECT_NAME }}_ENABLE_COVERAGE:BOOL=True -DGIT_SHA:STRING=${{ github.sha }} -DR_Type_ENABLE_SANITIZER_ADDRESS=OFF -DR_Type_ENABLE_SANITIZER_UNDEFINED=OFF
+
+      - name: Build
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: |
+          cmake --build ./build --config Release -j 8
