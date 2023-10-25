@@ -5,8 +5,8 @@
 ** RenderPlugin
 */
 
-#ifndef RENDERPLUGIN_HPP_
-#define RENDERPLUGIN_HPP_
+#ifndef PHYSICPLUGIN_HPP_
+#define PHYSICPLUGIN_HPP_
 
 #include "EwECS/ConfigReader/ConfigReader.hpp"
 #include "EwECS/IPlugin.hpp"
@@ -57,4 +57,4 @@ namespace ECS::Physic {
     };
 } // namespace ECS::Physic
 
-#endif /* !RENDERPLUGIN_HPP_ */
+#endif /* !PHYSICPLUGIN_HPP_ */
