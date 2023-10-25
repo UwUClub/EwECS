@@ -81,19 +81,21 @@ namespace ECS::Network {
         _onReceiveAknowledgment = aCallback;
     }
 
-    void ServerHandler::addClient(unsigned short aClientId)
+    int ServerHandler::addClient(size_t aClientId)
     {
         if (_waitingQueue.size() > 0) {
             _clients[aClientId] = *_waitingQueue[0];
             _waitingQueue.erase(_waitingQueue.begin());
 
-            for (unsigned short i = 0; i < _maxClients; i++) {
+            for (int i = 0; i < _maxClients; i++) {
                 if (_clientIds[i] == -1) {
                     _clientIds[i] = aClientId;
+                    std::cout << "Player " << aClientId << " joined" << std::endl;
+                    return i;
                 }
             }
-            std::cout << "Player " << aClientId << " joined" << std::endl;
         }
+        return -1;
     }
 
     int ServerHandler::getClientSeat(size_t aClientId)

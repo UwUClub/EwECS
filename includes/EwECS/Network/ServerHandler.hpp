@@ -89,8 +89,9 @@ namespace ECS::Network {
             /**
              * @brief Register a client to the server
              * @param aClientId The id of the client
+             * @return int The seat of the client
              */
-            void addClient(unsigned short);
+            int addClient(size_t);
 
             /**
              * @brief Get the seat of a client in the server
