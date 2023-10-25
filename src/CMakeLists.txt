@@ -12,16 +12,16 @@ target_sources(ecs PRIVATE
     )
 
 target_link_libraries(ecs
-    PRIVATE
-    EwECS::EwECS_warnings
-    sfml-graphics
-    sfml-window
-    sfml-system
-    sfml-audio
-    nlohmann_json
+        PUBLIC
+        EwECS::EwECS_warnings
+        sfml-graphics
+        sfml-window
+        sfml-system
+        sfml-audio
+        nlohmann_json
 )
 
-target_include_directories(ecs PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ecs PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set_target_properties(ecs PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
