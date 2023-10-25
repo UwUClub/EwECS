@@ -26,6 +26,7 @@ namespace ECS::Network {
             std::vector<std::unique_ptr<udp::endpoint>> _waitingQueue = std::vector<std::unique_ptr<udp::endpoint>>();
             ServerReceiveCallback _onReceive;
             ServerReceiveAknowledgmentCallback _onReceiveAknowledgment;
+            unsigned short _maxClients = 0;
 
             /**
              * @brief Launch the server
@@ -66,10 +67,11 @@ namespace ECS::Network {
              * @brief Start the server
              * @param aHost The host to listen to
              * @param aPort The port to listen to
+             * @param aMaxClients The maximum number of clients
              * @param aPacketFactory The packet factory
              * @return ServerHandler & The instance of the singleton
              */
-            void start(std::string &, unsigned short, PacketFactory &);
+            void start(std::string &, unsigned short, unsigned short, PacketFactory &);
 
             /**
              * @brief Set the on receive callback

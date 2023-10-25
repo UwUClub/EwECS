@@ -10,7 +10,8 @@ namespace ECS::Network {
 
     using boost::asio::ip::udp;
 
-    void ServerHandler::start(std::string &aHost, unsigned short aPort, PacketFactory &aPacketFactory)
+    void ServerHandler::start(std::string &aHost, unsigned short aPort, unsigned short aMaxClients,
+                              PacketFactory &aPacketFactory)
     {
         NetworkHandler &network = NetworkHandler::getInstance();
         udp::endpoint endpoint(boost::asio::ip::address::from_string(aHost), aPort);
@@ -27,6 +28,8 @@ namespace ECS::Network {
                 network.send(ERROR_PACKET_TYPE, aClientEndpoint);
             }
         });
+
+        _maxClients = aMaxClients;
 
         network.start(endpoint.protocol(), aPacketFactory);
         network.bind(endpoint);
@@ -100,7 +103,7 @@ namespace ECS::Network {
 
     bool ServerHandler::isFull() const
     {
-        return _clients.size() >= MAX_NUMBER_PLAYER;
+        return _clients.size() >= _maxClients;
     }
 
 } // namespace ECS::Network
