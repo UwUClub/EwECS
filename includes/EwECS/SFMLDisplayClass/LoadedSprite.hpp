@@ -41,7 +41,8 @@ namespace Component {
                 : 
                   texture(nullptr),
                   timer(0),
-                  currentRect(0)
+                  currentRect(0),
+                  scale(1.0)
             {
                 try {
                     auto config = ConfigReader::getInstance();
@@ -55,7 +56,7 @@ namespace Component {
                         this->rectTime.emplace_back(frame["time"]);
                     }
                 } catch (std::exception &e) {
-                    std::cerr << "Can't load asset: " << path << std::endl;
+                    throw std::runtime_error("Failed to load sprite: " + std::string(e.what()));
                 }
             }   
         
