@@ -129,6 +129,19 @@ namespace ECS::Core {
             }
 
             /**
+             * @brief Init a component at the position aPos to nullopt
+             *
+             * @param aPos The position to init the component (Index of the Entity)
+             */
+            void init(sizeType aPos)
+            {
+                if (aPos >= _container.size()) {
+                    _container.resize(aPos + 1);
+                }
+                _container[aPos].reset();
+            }
+
+            /**
              * @brief Emplace and build a component at the position aPos
              *
              * @tparam Args Inferred type of the arguments

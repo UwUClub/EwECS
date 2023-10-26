@@ -21,6 +21,7 @@ void ECS::Render::RenderPluginConfig::load(const std::string &aJsonPath)
             Logger::warning("Failed to load font: " + graphicsConf["font"].get<std::string>());
         } else {
             _isFontLoaded = true;
+            Logger::info("Font loaded: " + graphicsConf["font"].get<std::string>());
         }
 
         _configPath = aJsonPath;
@@ -54,12 +55,19 @@ void ECS::Render::RenderPlugin::plug(ECS::Core::World &aWorld, ECS::Asset::Asset
     try {
         aWorld.registerComponent<Component::LoadedSprite>();
     } catch (std::exception &e) {
-        Logger::error(e.what());
+        Logger::error("Loaded sprite already registered");
+    }
+    try {
+        aWorld.registerComponent<Component::TextComponent>();
+    } catch (std::exception &e) {
+        Logger::error("Text component already registered");
     }
 
     aWorld.addSystem<Component::LoadedSprite, ECS::Utils::Vector2f>(ECS::SFMLDisplayClass::displayEntities);
+    aWorld.addSystem<Component::TextComponent>(ECS::SFMLDisplayClass::displayTexts);
     aWorld.addSystem<Component::LoadedSprite>(ECS::SFMLDisplayClass::loadTextures);
     aWorld.addSystem(ECS::SFMLDisplayClass::getInput);
+    aWorld.addSystem(ECS::SFMLDisplayClass::display);
 
     aAssetManager.registerAssetHandler<sf::Texture *>();
 }

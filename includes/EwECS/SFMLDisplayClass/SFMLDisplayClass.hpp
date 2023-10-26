@@ -81,6 +81,12 @@ namespace ECS {
              */
             static void displayTexts(Core::SparseArray<Component::TextComponent> &aTexts);
 
+            /**
+             * @brief call the display function of the window
+             *
+             */
+            static void display();
+
             sf::RenderWindow _window;
             std::string _assetPath;
 

@@ -124,7 +124,6 @@ namespace ECS {
                 display._window.draw(sprite);
             }
         }
-        display._window.display();
     }
 
     void SFMLDisplayClass::loadTextures(Core::SparseArray<Component::LoadedSprite> &aSprites)
@@ -155,11 +154,19 @@ namespace ECS {
                 continue;
             }
             auto &text = aText.value().text;
+
             if (text.getFont() == nullptr) {
                 text.setFont(renderConfig._font);
             }
-            display._window.draw(aText.value().text);
+            display._window.draw(text);
         }
+    }
+
+    void SFMLDisplayClass::display()
+    {
+        SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
+
+        display._window.display();
     }
 
     SFMLDisplayClass::~SFMLDisplayClass()
