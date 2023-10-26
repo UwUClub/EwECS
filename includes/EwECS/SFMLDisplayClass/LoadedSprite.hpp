@@ -11,6 +11,8 @@
 #include <cstddef>
 #include <string>
 #include <utility>
+#include <vector>
+#include "EwECS/ConfigReader/ConfigReader.hpp"
 
 #ifndef LOADEDSPRITE_HPP
     #define LOADEDSPRITE_HPP
@@ -24,46 +26,41 @@ namespace Component {
              */
             LoadedSprite()
                 : texture(nullptr),
-                  rect(sf::IntRect(0, 0, 0, 0)),
-                  srcRect(sf::IntRect(0, 0, 0, 0))
-            {}
-            /**
-             * @brief Construct a new Loaded Sprite object
-             *
-             * @param aPath path to the sprite
-             * @param aTexture texture of the sprite (once loaded)
-             * @param aTextureRect Size and position of the sprite in the texture
-             * @param aDisplayRect Size and position of the sprite on the screen
-             */
-            LoadedSprite(std::string aPath, sf::Texture *aTexture, sf::IntRect &aTextureRect , sf::IntRect &aDisplayRect)
-                : path(std::move(aPath)),
-                  texture(aTexture),
-                  rect(aTextureRect),
-                  srcRect(aDisplayRect)
+                  timer(0),
+                  currentRect(0),
+                  scale(1.0)
             {}
 
             /**
              * @brief Construct a new Loaded Sprite object
              *
-             * @param aPath path to the sprite
-             * @param aTexture texture of the sprite (once loaded)
-             * @param aTextureRect Size and position of the sprite in the texture
-             * @param aDisplayRect Size and position of the sprite on the screen
+             * @param aPath path to the JSON config file
              */
-            LoadedSprite(std::string aPath, sf::Texture *aTexture, sf::IntRect &aTextureRect, sf::IntRect &aDisplayRect,
-                         float aScale)
-                : path(std::move(aPath)),
-                  texture(aTexture),
-                  rect(aTextureRect),
-                  srcRect(aDisplayRect),
-                  scale(aScale)
-            {}
+            LoadedSprite(std::string aJsonPath)
+                : 
+                  texture(nullptr),
+                  timer(0),
+                  currentRect(0)
+            {
+                auto config = ConfigReader::getInstance();
+                auto &json = config.loadConfig(aJsonPath);
 
+                path = json["path"];
+                scale = json["scale"];
+                auto &rects = json["rects"];
+                for (auto &frame : rects) {
+                    this->rect.emplace_back(frame["top"], frame["left"], frame["width"], frame["height"]);
+                    this->rectTime.emplace_back(frame["time"]);
+                }
+            }
+        
             std::string path;
             sf::Texture *texture;
-            sf::IntRect rect;
-            sf::IntRect srcRect;
-            float scale = 1.0;
+            std::vector<sf::IntRect> rect;
+            std::vector<float> rectTime;
+            float timer;
+            size_t currentRect;
+            float scale;
     };
 } // namespace Component
 #endif // DEBUG
