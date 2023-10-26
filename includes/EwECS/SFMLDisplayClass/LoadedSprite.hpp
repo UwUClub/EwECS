@@ -12,6 +12,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iostream>
 #include "EwECS/ConfigReader/ConfigReader.hpp"
 
 #ifndef LOADEDSPRITE_HPP
@@ -42,17 +43,21 @@ namespace Component {
                   timer(0),
                   currentRect(0)
             {
-                auto config = ConfigReader::getInstance();
-                auto &json = config.loadConfig(aJsonPath);
+                try {
+                    auto config = ConfigReader::getInstance();
+                    auto &json = config.loadConfig(aJsonPath);
 
-                path = json["path"];
-                scale = json["scale"];
-                auto &rects = json["rects"];
-                for (auto &frame : rects) {
-                    this->rect.emplace_back(frame["top"], frame["left"], frame["width"], frame["height"]);
-                    this->rectTime.emplace_back(frame["time"]);
+                    path = json["path"];
+                    scale = json["scale"];
+                    auto &rects = json["rects"];
+                    for (auto &frame : rects) {
+                        this->rect.emplace_back(frame["left"], frame["top"], frame["width"], frame["height"]);
+                        this->rectTime.emplace_back(frame["time"]);
+                    }
+                } catch (std::exception &e) {
+                    std::cerr << "Can't load asset: " << path << std::endl;
                 }
-            }
+            }   
         
             std::string path;
             sf::Texture *texture;
