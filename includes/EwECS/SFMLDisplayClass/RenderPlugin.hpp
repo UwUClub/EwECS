@@ -9,6 +9,7 @@
 #define RENDERPLUGIN_HPP_
 
 #include "EwECS/IPlugin.hpp"
+#include "SFML/Graphics/Font.hpp"
 
 namespace ECS::Render {
     class RenderPluginConfig final : public ECS::Plugin::IConfigPlugin
@@ -30,6 +31,8 @@ namespace ECS::Render {
             std::size_t _windowWidth;
             std::size_t _windowHeight;
             std::string _configPath;
+            sf::Font _font;
+            bool _isFontLoaded;
     };
 
     class RenderPlugin final : public ECS::Plugin::IPlugin

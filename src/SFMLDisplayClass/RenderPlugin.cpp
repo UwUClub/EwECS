@@ -16,16 +16,24 @@ void ECS::Render::RenderPluginConfig::load(const std::string &aJsonPath)
         _windowName = graphicsConf["name"];
         _windowWidth = graphicsConf["width"];
         _windowHeight = graphicsConf["height"];
+
+        if (!_font.loadFromFile(graphicsConf["font"])) {
+            Logger::warning("Failed to load font: " + graphicsConf["font"].get<std::string>());
+        } else {
+            _isFontLoaded = true;
+        }
+
         _configPath = aJsonPath;
     } catch (std::exception &e) {
-        std::cerr << "Failed to load config: " << e.what() << std::endl;
+        Logger::error("Failed to load graphics config: " + std::string(e.what()));
     }
 }
 
 ECS::Render::RenderPluginConfig::RenderPluginConfig()
     : _windowName("ECS"),
       _windowWidth(1920),
-      _windowHeight(1080)
+      _windowHeight(1080),
+      _isFontLoaded(false)
 {}
 
 ECS::Render::RenderPluginConfig &ECS::Render::RenderPluginConfig::getInstance()

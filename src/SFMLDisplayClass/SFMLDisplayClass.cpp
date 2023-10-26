@@ -142,6 +142,26 @@ namespace ECS {
         }
     }
 
+    void SFMLDisplayClass::displayTexts(Core::SparseArray<Component::TextComponent> &aTexts)
+    {
+        SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
+        Render::RenderPluginConfig &renderConfig = Render::RenderPluginConfig::getInstance();
+
+        if (!renderConfig._isFontLoaded) {
+            return;
+        }
+        for (auto &aText : aTexts) {
+            if (!aText.has_value()) {
+                continue;
+            }
+            auto &text = aText.value().text;
+            if (text.getFont() == nullptr) {
+                text.setFont(renderConfig._font);
+            }
+            display._window.draw(aText.value().text);
+        }
+    }
+
     SFMLDisplayClass::~SFMLDisplayClass()
     {
         _window.close();

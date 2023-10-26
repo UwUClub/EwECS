@@ -15,9 +15,12 @@
     #include <cstddef>
     #include <string>
     #include "EwECS/Event/KeyboardEvent.hpp"
+    #include "EwECS/SFMLDisplayClass/LoadedSprite.hpp"
+    #include "EwECS/SFMLDisplayClass/TextComponent.hpp"
     #include "EwECS/Utils.hpp"
     #include "EwECS/World.hpp"
-    #include "EwECS/SFMLDisplayClass/LoadedSprite.hpp"
+    #include "SFML/Graphics/Font.hpp"
+    #include "SFML/Graphics/Text.hpp"
     #include <unordered_map>
 
 namespace ECS {
@@ -50,13 +53,6 @@ namespace ECS {
             sf::Texture *getTexture(const std::string &path);
 
             /**
-             * @brief Free the rects of the entity
-             *
-             * @param idx The index of the entity
-             */
-            void freeRects(const std::size_t &idx);
-
-            /**
              * @brief Get the player input
              *
              */
@@ -77,6 +73,13 @@ namespace ECS {
              * @param aSprites SparseArray of all the sprites
              */
             static void loadTextures(Core::SparseArray<Component::LoadedSprite> &aSprites);
+
+            /**
+             * @brief Display all the texts of the game
+             *
+             * @param aTexts SparseArray of all the texts
+             */
+            static void displayTexts(Core::SparseArray<Component::TextComponent> &aTexts);
 
             sf::RenderWindow _window;
             std::string _assetPath;
