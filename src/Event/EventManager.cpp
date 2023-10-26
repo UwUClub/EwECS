@@ -1,4 +1,4 @@
-#include "EventManager.hpp"
+#include "EwECS/Event/EventManager.hpp"
 #include <memory>
 
 //-------------------CONSTRUCTORS / DESTRUCTOR-------------------//

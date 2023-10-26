@@ -5,21 +5,22 @@
 ** SFMLDisplayClass
 */
 
-#include "SFMLDisplayClass.hpp"
+#include "EwECS/SFMLDisplayClass/SFMLDisplayClass.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
-#include <functional>
-#include "EventManager.hpp"
-#include "KeyboardEvent.hpp"
 #include <algorithm>
+#include <functional>
 #include <iostream>
-#include "World.hpp"
-#include "LoadedSprite.hpp"
-#include "Asset/AssetManager.hpp"
-#include "Utils.hpp"
-#include "ConfigReader.hpp"
+#include "EwECS/Asset/AssetManager.hpp"
+#include "EwECS/ConfigReader/ConfigReader.hpp"
+#include "EwECS/Event/EventManager.hpp"
+#include "EwECS/Event/KeyboardEvent.hpp"
+#include "EwECS/SFMLDisplayClass/LoadedSprite.hpp"
+#include "EwECS/SFMLDisplayClass/RenderPlugin.hpp"
+#include "EwECS/Utils.hpp"
+#include "EwECS/World.hpp"
+
 #if defined(__linux__)
     #include <libgen.h>
     #include <limits.h>
@@ -29,16 +30,14 @@
 namespace ECS {
     SFMLDisplayClass::SFMLDisplayClass()
     {
-        auto &configReader = ConfigReader::getInstance();
-        configReader.loadConfig("assets/config/r-type.json");
-        auto &graphicsConf = configReader.get()["graphics"];
-        
-        _window.create(sf::VideoMode(graphicsConf["width"], graphicsConf["height"]), "R-Type");
+        auto &renderConfig = Render::RenderPluginConfig::getInstance();
+
+        _window.create(sf::VideoMode(renderConfig._windowWidth, renderConfig._windowHeight), renderConfig._windowName);
         /*if (_window == nullptr) {
             std::cout << "Failed to create SFML window: " << std::endl;
             return;
         }*/
-    #if defined(__linux__)
+#if defined(__linux__)
         char result[PATH_MAX];
         ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
         if (count < 0 || count >= PATH_MAX) {
@@ -52,9 +51,9 @@ namespace ECS {
             return;
         }
         _assetPath = std::string(dir) + "/";
-    #else
+#else
         _assetPath = "./";
-    #endif
+#endif
     }
 
     sf::Texture *SFMLDisplayClass::getTexture(const std::string &aPath)
@@ -98,7 +97,7 @@ namespace ECS {
     }
 
     void SFMLDisplayClass::displayEntities(Core::SparseArray<Component::LoadedSprite> &aSprites,
-                                 Core::SparseArray<Utils::Vector2f> &aPos)
+                                           Core::SparseArray<Utils::Vector2f> &aPos)
     {
         SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
         auto &world = Core::World::getInstance();
@@ -134,7 +133,6 @@ namespace ECS {
                 display._window.draw(sprite);
             }
         }
-        display._window.display();
     }
 
     void SFMLDisplayClass::loadTextures(Core::SparseArray<Component::LoadedSprite> &aSprites)
@@ -152,8 +150,36 @@ namespace ECS {
         }
     }
 
+    void SFMLDisplayClass::displayTexts(Core::SparseArray<Component::TextComponent> &aTexts)
+    {
+        SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
+        Render::RenderPluginConfig &renderConfig = Render::RenderPluginConfig::getInstance();
+
+        if (!renderConfig._isFontLoaded) {
+            return;
+        }
+        for (auto &aText : aTexts) {
+            if (!aText.has_value()) {
+                continue;
+            }
+            auto &text = aText.value().text;
+
+            if (text.getFont() == nullptr) {
+                text.setFont(renderConfig._font);
+            }
+            display._window.draw(text);
+        }
+    }
+
+    void SFMLDisplayClass::display()
+    {
+        SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
+
+        display._window.display();
+    }
+
     SFMLDisplayClass::~SFMLDisplayClass()
     {
         _window.close();
     }
-}
+} // namespace ECS

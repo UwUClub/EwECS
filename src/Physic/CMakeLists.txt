@@ -1,5 +1,5 @@
 target_sources(ecs PRIVATE
-    AssetManager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PhysicPlugin.cpp
     )
 
 target_include_directories(ecs PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

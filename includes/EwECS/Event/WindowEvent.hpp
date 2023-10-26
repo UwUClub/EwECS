@@ -1,7 +1,7 @@
 #ifndef WINDOWEVENT_HPP
 #define WINDOWEVENT_HPP
 
-#include "../Utils.hpp"
+#include "EwECS/Utils.hpp"
 
 namespace ECS::Event {
     enum class WindowFocusState

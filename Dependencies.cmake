@@ -1,10 +1,12 @@
-include(cmake/CPM.cmake)
 include(FetchContent)
 
 # Done as a function so that updates to variables like
 # CMAKE_CXX_FLAGS don't propagate out to other
 # targets
 function(EwECS_setup_dependencies)
+    set(BUILD_SHARED_LIBS OFF)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    set(FETCHCONTENT_QUIET FALSE)
 
     FetchContent_Declare(
         SFML
@@ -13,14 +15,11 @@ function(EwECS_setup_dependencies)
     )
     FetchContent_MakeAvailable(SFML)
 
-    if (NOT TARGET nlohmann_json)
-    CPMAddPackage(
-            NAME nlohmann_json
-            VERSION 3.11.2
-            GITHUB_REPOSITORY "nlohmann/json"
+    FetchContent_Declare(
+            nlohmann_json
+            GIT_REPOSITORY https://github.com/nlohmann/json.git
             GIT_TAG v3.11.2
-            GIT_SHALLOW TRUE
     )
-    endif()
+    FetchContent_MakeAvailable(nlohmann_json)
 
 endfunction()

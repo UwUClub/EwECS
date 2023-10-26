@@ -1,4 +1,4 @@
-#include "AssetManager.hpp"
+#include "EwECS/Asset/AssetManager.hpp"
 
 ECS::Asset::AssetManager &ECS::Asset::AssetManager::getInstance() noexcept
 {

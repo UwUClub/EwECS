@@ -2,9 +2,8 @@
 #define CONFIG_READER_HPP_
 
 #include <nlohmann/json.hpp>
+#include <unordered_map>
 using json = nlohmann::json;
-
-static const std::string CONFIG_PATH = "assets/config/r-type.json";
 
 /**
  * @brief ConfigReader class is used to read the config files
@@ -12,6 +11,7 @@ static const std::string CONFIG_PATH = "assets/config/r-type.json";
 class ConfigReader
 {
     private:
+        std::unordered_map<std::string, json> _configPaths;
         json _data;
 
     public:
@@ -20,6 +20,8 @@ class ConfigReader
          *
          */
         ConfigReader() = default;
+
+        explicit ConfigReader(const std::string &);
 
         /**
          * @brief Destroy the ConfigReader object
@@ -43,14 +45,14 @@ class ConfigReader
          * @brief Load the config file
          *
          */
-        void loadConfig(const std::string &jsonPath);
+        json &loadConfig(const std::string &jsonPath);
 
         /**
          * @brief Get all the config
          *
          * @return All the config
          */
-        json &get();
+        json &get(const std::string &configName);
 };
 
 #endif

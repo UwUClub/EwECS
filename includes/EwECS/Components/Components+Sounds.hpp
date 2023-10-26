@@ -14,8 +14,8 @@ namespace Component {
              * @brief the constructor of Sound
              */
             SoundsComponents()
-                : loop(false),
-                  volume(100)
+                : _loop(false),
+                  _volume(100)
             {}
 
             /**
@@ -24,15 +24,15 @@ namespace Component {
              * @param loop
              * @param volume
              */
-            SoundsComponents(const std::string &path, bool loop, float volume)
-                : path(path),
-                  loop(loop),
-                  volume(volume)
+            SoundsComponents(const std::string &aPath, bool aLoop, float aVolume)
+                : _path(aPath),
+                  _loop(aLoop),
+                  _volume(aVolume)
             {}
 
-            std::string path;
-            bool loop;
-            float volume;
+            std::string _path;
+            [[maybe_unused]] bool _loop;
+            [[maybe_unused]] float _volume;
     };
 } // namespace Component
 

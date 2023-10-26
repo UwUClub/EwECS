@@ -20,7 +20,7 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#include "SparseArray.hpp"
+#include "EwECS/SparseArray.hpp"
 #include <unordered_map>
 
 namespace ECS::Core {
@@ -64,7 +64,7 @@ as Component container
                 _addFunctions[std::type_index(typeid(Component))] = [](World &registry, const std::size_t &idx) {
                     auto &myComponent = registry.getComponent<Component>();
 
-                    myComponent.emplaceAt(idx, Component());
+                    myComponent.init(idx);
                 };
                 return std::any_cast<SparseArray<Component> &>(component);
             }

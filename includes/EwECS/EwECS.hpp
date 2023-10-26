@@ -8,14 +8,14 @@
 #ifndef EWECS_HPP_
 #define EWECS_HPP_
 
-#include "Asset/AssetHandler.hpp"
-#include "Event/EventHandler.hpp"
-#include "Event/EventManager.hpp"
-#include "Event/KeyboardEvent.hpp"
-#include "Event/MouseEvent.hpp"
-#include "Event/WindowEvent.hpp"
-#include "SparseArray.hpp"
-#include "Utils.hpp"
-#include "World.hpp"
+#include "EwECS/Asset/AssetHandler.hpp"
+#include "EwECS/Event/EventHandler.hpp"
+#include "EwECS/Event/EventManager.hpp"
+#include "EwECS/Event/KeyboardEvent.hpp"
+#include "EwECS/Event/MouseEvent.hpp"
+#include "EwECS/Event/WindowEvent.hpp"
+#include "EwECS/SparseArray.hpp"
+#include "EwECS/Utils.hpp"
+#include "EwECS/World.hpp"
 
 #endif /* !EWECS_HPP_ */
