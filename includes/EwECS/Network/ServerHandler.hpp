@@ -7,13 +7,12 @@
 #include "NetworkHandler.hpp"
 #include "Packet.hpp"
 #include <unordered_map>
+#include "Values.hpp"
 
 #ifndef SERVERHANDLER_HPP
     #define SERVERHANDLER_HPP
 
 namespace ECS::Network {
-
-    constexpr unsigned short READ_BUFFER_SIZE = 1024;
 
     using boost::asio::ip::udp;
     using ServerReceiveCallback = std::function<void(int8_t, IPayload *, unsigned short)>;

@@ -47,11 +47,6 @@ namespace ECS::Network {
     });
     struct IPayload
     {};
-
-    struct Aknowlegdment
-    {
-            std::string uuid;
-    };
 } // namespace ECS::Network
 
 #endif
