@@ -100,6 +100,7 @@ namespace ECS {
                                            Core::SparseArray<Utils::Vector2f> &aPos)
     {
         SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
+        auto &world = Core::World::getInstance();
         const auto size = aSprites.size();
 
         display._window.clear(sf::Color::Black);
@@ -114,17 +115,24 @@ namespace ECS {
             auto &spriteData = aSprites[i].value();
             auto &pos = aPos[i].value();
 
-            if (spriteData.rect != sf::IntRect(0, 0, 0, 0)) {
+            if (!spriteData.rect.empty()) {
                 sf::Sprite sprite;
 
+                spriteData.timer += world.getDeltaTime();
+                if (spriteData.timer >= spriteData.rectTime[spriteData.currentRect]) {
+                    spriteData.timer = 0;
+                    spriteData.currentRect++;
+                    if (spriteData.currentRect >= spriteData.rect.size()) {
+                        spriteData.currentRect = 0;
+                    }
+                }
                 sprite.setTexture(*spriteData.texture);
-                sprite.setTextureRect(spriteData.rect);
+                sprite.setTextureRect(spriteData.rect[spriteData.currentRect]);
                 sprite.setPosition(pos.x, pos.y);
                 sprite.scale(spriteData.scale, spriteData.scale);
                 display._window.draw(sprite);
             }
         }
-        display._window.display();
     }
 
     void SFMLDisplayClass::loadTextures(Core::SparseArray<Component::LoadedSprite> &aSprites)
@@ -140,6 +148,34 @@ namespace ECS {
                 std::cerr << "Failed to load texture: " << aSprite.value().path << std::endl;
             }
         }
+    }
+
+    void SFMLDisplayClass::displayTexts(Core::SparseArray<Component::TextComponent> &aTexts)
+    {
+        SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
+        Render::RenderPluginConfig &renderConfig = Render::RenderPluginConfig::getInstance();
+
+        if (!renderConfig._isFontLoaded) {
+            return;
+        }
+        for (auto &aText : aTexts) {
+            if (!aText.has_value()) {
+                continue;
+            }
+            auto &text = aText.value().text;
+
+            if (text.getFont() == nullptr) {
+                text.setFont(renderConfig._font);
+            }
+            display._window.draw(text);
+        }
+    }
+
+    void SFMLDisplayClass::display()
+    {
+        SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
+
+        display._window.display();
     }
 
     SFMLDisplayClass::~SFMLDisplayClass()

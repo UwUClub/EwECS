@@ -9,6 +9,8 @@ function(EwECS_setup_dependencies)
     set(BOOST_LIBS system serialization align assert config core static_assert throw_exception array bind chrono integer move mpl predef asio ratio type_traits typeof utility coroutine date_time function regex smart_ptr preprocessor io uuid)
     set(BOOST_INCLUDE_LIBRARIES ${BOOST_LIBS})
 
+    set(BUILD_SHARED_LIBS OFF)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
     set(FETCHCONTENT_QUIET FALSE)
 
     FetchContent_Declare(

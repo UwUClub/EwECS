@@ -2,6 +2,7 @@
 #include <cstddef>
 #include "EwECS/Asset/AssetManager.hpp"
 #include "EwECS/ConfigReader/ConfigReader.hpp"
+#include "EwECS/Logger.hpp"
 #include "EwECS/Physic/HitBox.hpp"
 #include "EwECS/Physic/Weight.hpp"
 #include "EwECS/Utils.hpp"
@@ -10,9 +11,8 @@
 void ECS::Physic::PhysicPluginConfig::load(const std::string &aJsonPath)
 {
     auto &configReader = ConfigReader::getInstance();
-    configReader.loadConfig(aJsonPath);
     try {
-        auto &physicConf = configReader.get(aJsonPath)["physics"];
+        auto &physicConf = configReader.loadConfig(aJsonPath)["physics"];
 
         _configPath = aJsonPath;
         _gravity = static_cast<float>(physicConf["gravity"]);
@@ -20,19 +20,13 @@ void ECS::Physic::PhysicPluginConfig::load(const std::string &aJsonPath)
 
     } catch (std::exception &e) {
         std::cerr << "Failed to load config: " << e.what() << std::endl;
-
-        _configPath = "";
-        _gravity = 0;
-        _initialJumpVelocity = 0;
     }
 }
 
 ECS::Physic::PhysicPluginConfig::PhysicPluginConfig()
-    : _gravity(0),
-      _initialJumpVelocity(0)
-{
-    load(ECS::Physic::PHYSIC_PLUGIN_CONFIG_BASE);
-}
+    : _gravity(2),
+      _initialJumpVelocity(2)
+{}
 
 ECS::Physic::PhysicPluginConfig &ECS::Physic::PhysicPluginConfig::getInstance()
 {
@@ -83,11 +77,20 @@ void ECS::Physic::PhysicPlugin::checkCollision(ECS::Core::SparseArray<ECS::Utils
 
 void ECS::Physic::PhysicPlugin::plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager & /*aAssetManager*/)
 {
-    aWorld.registerComponent<Component::HitBox>();
-    aWorld.registerComponent<Component::Weight>();
+    try {
+        aWorld.registerComponent<Component::HitBox>();
+    } catch (std::exception &e) {
+        Logger::error(e.what());
+    }
+    try {
+        aWorld.registerComponent<Component::Weight>();
+    } catch (std::exception &e) {
+        Logger::error(e.what());
+    }
     try {
         aWorld.registerComponent<Utils::Vector2f>();
     } catch (std::exception &e) {
+        Logger::error(e.what());
     }
 
     aWorld.addSystem<ECS::Utils::Vector2f, Component::HitBox>(checkCollision);
