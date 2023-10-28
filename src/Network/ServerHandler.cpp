@@ -17,12 +17,7 @@ namespace ECS::Network {
         udp::endpoint endpoint(boost::asio::ip::address::from_string(aHost), aPort);
 
         network.onReceive([this](int8_t aType, IPayload *aPayload, udp::endpoint &aClientEndpoint) {
-            if (aType >= ERROR_PACKET_TYPE) {
-                handlePacket(aType, aPayload, aClientEndpoint);
-            } else {
-                NetworkHandler &network = NetworkHandler::getInstance();
-                network.send(ERROR_PACKET_TYPE, aClientEndpoint);
-            }
+            handlePacket(aType, aPayload, aClientEndpoint);
         });
 
         _maxClients = aMaxClients;

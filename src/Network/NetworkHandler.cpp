@@ -53,6 +53,9 @@ namespace ECS::Network {
 
             IPayload *payload = nullptr;
 
+            if (type < ERROR_PACKET_TYPE) {
+                throw std::runtime_error("Invalid packet type");
+            }
             if (_packetFactory.find(type) != _packetFactory.end()) {
                 buff.erase(buff.begin(), buff.begin() + sizeof(PacketHeader));
                 payload = _packetFactory[type](buff);
