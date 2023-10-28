@@ -13,6 +13,7 @@
 #include <iostream>
 #include <memory>
 #include <type_traits>
+#include <unordered_map>
 
 template<typename Asset>
 concept NonPointer = not std::is_pointer_v<Asset>;
