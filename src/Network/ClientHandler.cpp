@@ -28,9 +28,7 @@ namespace ECS::Network {
         network.onReceive([this](int8_t aType, IPayload *aPayload, udp::endpoint &aEndpoint) {
             (void) aEndpoint;
             if (aEndpoint == _serverEndpoint) {
-                if (aType >= 0) {
-                    _onReceive(aType, aPayload);
-                }
+                _onReceive(aType, aPayload);
             }
         });
 

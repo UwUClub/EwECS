@@ -17,11 +17,7 @@ namespace ECS::Network {
         udp::endpoint endpoint(boost::asio::ip::address::from_string(aHost), aPort);
 
         network.onReceive([this](int8_t aType, IPayload *aPayload, udp::endpoint &aClientEndpoint) {
-            if (aType == AKNOWLEDGMENT_PACKET_TYPE) {
-                handleAknowledgment(aClientEndpoint);
-            } else if (aType == ERROR_PACKET_TYPE) {
-                // receive error packet
-            } else if (aType >= 0) {
+            if (aType >= ERROR_PACKET_TYPE) {
                 handlePacket(aType, aPayload, aClientEndpoint);
             } else {
                 NetworkHandler &network = NetworkHandler::getInstance();
@@ -59,26 +55,9 @@ namespace ECS::Network {
         _onReceive(aType, aPayload, entityId);
     }
 
-    void ServerHandler::handleAknowledgment(const udp::endpoint &aClientEndpoint)
-    {
-        auto client = std::find_if(_clients.begin(), _clients.end(),
-                                   [aClientEndpoint](const std::pair<size_t, udp::endpoint> &aPair) {
-                                       return aPair.second == aClientEndpoint;
-                                   });
-        if (client == _clients.end()) {
-            return;
-        }
-        _onReceiveAknowledgment(client->first);
-    }
-
     void ServerHandler::onReceive(ServerReceiveCallback aCallback)
     {
         _onReceive = aCallback;
-    }
-
-    void ServerHandler::onReceiveAknowledgment(ServerReceiveAknowledgmentCallback aCallback)
-    {
-        _onReceiveAknowledgment = aCallback;
     }
 
     int ServerHandler::addClient(size_t aClientId)

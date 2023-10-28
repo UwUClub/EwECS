@@ -6,8 +6,8 @@
 #include "EwECS/SparseArray.hpp"
 #include "NetworkHandler.hpp"
 #include "Packet.hpp"
-#include <unordered_map>
 #include "Values.hpp"
+#include <unordered_map>
 
 #ifndef SERVERHANDLER_HPP
     #define SERVERHANDLER_HPP
@@ -16,7 +16,6 @@ namespace ECS::Network {
 
     using boost::asio::ip::udp;
     using ServerReceiveCallback = std::function<void(int8_t, IPayload *, unsigned short)>;
-    using ServerReceiveAknowledgmentCallback = std::function<void(unsigned short)>;
 
     class ServerHandler
     {
@@ -24,7 +23,6 @@ namespace ECS::Network {
             std::unordered_map<size_t, udp::endpoint> _clients;
             std::vector<std::unique_ptr<udp::endpoint>> _waitingQueue = std::vector<std::unique_ptr<udp::endpoint>>();
             ServerReceiveCallback _onReceive;
-            ServerReceiveAknowledgmentCallback _onReceiveAknowledgment;
             unsigned short _maxClients = 0;
             std::vector<size_t> _clientIds;
 
@@ -78,12 +76,6 @@ namespace ECS::Network {
              * @param aOnReceive The callback to set
              */
             void onReceive(ServerReceiveCallback);
-
-            /**
-             * @brief Set the on receive aknowledgment callback
-             * @param aOnReceiveAknowledgment The callback to set
-             */
-            void onReceiveAknowledgment(ServerReceiveAknowledgmentCallback);
 
             /**
              * @brief Register a client to the server

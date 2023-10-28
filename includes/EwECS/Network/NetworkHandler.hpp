@@ -46,13 +46,6 @@ namespace ECS::Network {
              */
             void tryHandleRequest(const boost::system::error_code &, std::size_t);
 
-            /**
-             * @brief Handle a request from a client
-             *
-             * @param aBytesTransferred The number of bytes transferred
-             */
-            void handleRequest(std::size_t);
-
         public:
             /**
              * @brief Destroy the NetworkHandler object

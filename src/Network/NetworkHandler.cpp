@@ -78,9 +78,6 @@ namespace ECS::Network {
         listen();
     }
 
-    void NetworkHandler::handleRequest(std::size_t aBytesTransferred)
-    {}
-
     void NetworkHandler::send(int8_t aType, const udp::endpoint &aEndpoint)
     {
         PacketHeader header(aType);
