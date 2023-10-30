@@ -112,15 +112,10 @@ namespace ECS {
             SFMLDisplayClass();
 
             static const inline std::unordered_map<Component::TextColor, sf::Color> _colorMap = {
-                {Component::TextColor::RED, sf::Color::Red},
-                {Component::TextColor::GREEN, sf::Color::Green},
-                {Component::TextColor::BLUE, sf::Color::Blue},
-                {Component::TextColor::YELLOW, sf::Color::Yellow},
-                {Component::TextColor::WHITE, sf::Color::White},
-                {Component::TextColor::BLACK, sf::Color::Black},
-                {Component::TextColor::MAGENTA, sf::Color::Magenta},
-                {Component::TextColor::CYAN, sf::Color::Cyan},
-                {Component::TextColor::TRANSPARENT, sf::Color::Transparent},
+                {Component::TextColor::RED, sf::Color::Red},         {Component::TextColor::GREEN, sf::Color::Green},
+                {Component::TextColor::BLUE, sf::Color::Blue},       {Component::TextColor::YELLOW, sf::Color::Yellow},
+                {Component::TextColor::WHITE, sf::Color::White},     {Component::TextColor::BLACK, sf::Color::Black},
+                {Component::TextColor::MAGENTA, sf::Color::Magenta}, {Component::TextColor::CYAN, sf::Color::Cyan},
                 {Component::TextColor::DEFAULT, sf::Color::White},
             };
     };

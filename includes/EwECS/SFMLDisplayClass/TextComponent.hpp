@@ -23,7 +23,6 @@ namespace Component {
         BLACK,
         MAGENTA,
         CYAN,
-        TRANSPARENT,
         DEFAULT
     };
     struct TextComponent
