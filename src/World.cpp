@@ -10,6 +10,12 @@ ECS::Core::World &ECS::Core::World::getInstance()
 
 void ECS::Core::World::killEntity(const std::size_t &aIdx)
 {
+    if (aIdx >= _id) {
+        return;
+    }
+    if (std::find(_reusableIds.begin(), _reusableIds.end(), aIdx) != _reusableIds.end()) {
+        return;
+    }
     for (auto &component : _components) {
         _eraseFunctions[component.first](*this, aIdx);
     }
@@ -27,9 +33,9 @@ size_t ECS::Core::World::createEntity()
         _id++;
         return idx;
     }
-    auto &idx = _reusableIds.front();
-
-    _reusableIds.erase(_reusableIds.begin());
+    auto smallest = std::min_element(_reusableIds.begin(), _reusableIds.end());
+    size_t idx = *smallest;
+    _reusableIds.erase(smallest);
     for (auto &component : _components) {
         _addFunctions[component.first](*this, idx);
     }
