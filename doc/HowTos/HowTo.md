@@ -14,3 +14,7 @@
 Refer to the [Component tutorial](./HowTo+Component.md) file.
 ### Systems
 Refer to the [System tutorial](./HowTo+System.md) file.
+### Entities
+Refer to the [Entity tutorial](./HowTo+Entity.md) file.
+### Events
+Refer to the [Event tutorial](./HowTo+Event.md) file.

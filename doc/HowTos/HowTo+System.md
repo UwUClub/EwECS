@@ -102,4 +102,3 @@ int main(void)
 
 ## Conclusion
 This is just some example of how to use the ECS, you can use it as you want.
-Read the full documentation of the ECS on our [website](https://uwuclub.github.io/R-Type/).

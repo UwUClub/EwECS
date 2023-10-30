@@ -78,4 +78,3 @@ int main(void)
 }
 ```
 ## Conclusion
-This is just some example of how to use the components, you can use it as you want.
