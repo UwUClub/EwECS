@@ -20,6 +20,7 @@
 #include "EwECS/SFMLDisplayClass/RenderPlugin.hpp"
 #include "EwECS/Utils.hpp"
 #include "EwECS/World.hpp"
+#include "SFML/Graphics/Text.hpp"
 
 #if defined(__linux__)
     #include <libgen.h>
@@ -150,7 +151,8 @@ namespace ECS {
         }
     }
 
-    void SFMLDisplayClass::displayTexts(Core::SparseArray<Component::TextComponent> &aTexts)
+    void SFMLDisplayClass::displayTexts(Core::SparseArray<Component::TextComponent> &aTexts,
+                                        Core::SparseArray<Utils::Vector2f> &aPos)
     {
         SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
         Render::RenderPluginConfig &renderConfig = Render::RenderPluginConfig::getInstance();
@@ -158,14 +160,32 @@ namespace ECS {
         if (!renderConfig._isFontLoaded) {
             return;
         }
-        for (auto &aText : aTexts) {
-            if (!aText.has_value()) {
+        auto size = aTexts.size();
+        for (std::size_t idx = 0; idx < size; idx++) {
+            auto &textDataOpt = aTexts[idx];
+            auto &posOpt = aPos[idx];
+
+            if (!textDataOpt.has_value()) {
                 continue;
             }
-            auto &text = aText.value().text;
+            auto &textData = textDataOpt.value();
+            sf::Text text;
 
-            if (text.getFont() == nullptr) {
-                text.setFont(renderConfig._font);
+            text.setFont(renderConfig._font);
+            text.setString(textData.text);
+            text.setCharacterSize(textData.size);
+            auto color = textData.color;
+            if (_colorMap.find(color) != _colorMap.end()) {
+                text.setFillColor(_colorMap.at(color));
+            } else {
+                text.setFillColor(sf::Color::White);
+            }
+            if (posOpt.has_value()) {
+                auto &pos = posOpt.value();
+
+                text.setPosition(pos.x, pos.y);
+            } else {
+                text.setPosition(0, 0);
             }
             display._window.draw(text);
         }
