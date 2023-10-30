@@ -2,6 +2,7 @@
 #define HITBOX_HPP_
 
 #include <cstddef>
+#include <vector>
 namespace Component {
     struct HitBox
     {
@@ -12,8 +13,7 @@ namespace Component {
             HitBox()
                 : width(0),
                   height(0),
-                  isColliding(false),
-                  collidingId(0)
+                  isColliding(false)
             {}
             /**
              * @brief Construct a new Hit Box object
@@ -24,13 +24,12 @@ namespace Component {
             HitBox(float aWidth, float aHeight)
                 : width(aWidth),
                   height(aHeight),
-                  isColliding(false),
-                  collidingId(0)
+                  isColliding(false)
             {}
             float width;
             float height;
             bool isColliding;
-            size_t collidingId;
+            std::vector<std::size_t> collidingId;
     };
 } // namespace Component
 
