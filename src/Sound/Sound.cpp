@@ -6,7 +6,7 @@
 #include <SFML/Audio.hpp>
 #include "EwECS/Asset/AssetManager.hpp"
 #include "EwECS/World.hpp"
-#include "EwECS/Components/Components+Sounds.hpp"
+#include "SoundsComponent.hpp"
 
 namespace ECS {
     void Sound::plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager)
@@ -22,6 +22,9 @@ namespace ECS {
         if (!Asset::AssetManager::getInstance().hasAsset<sf::Sound *>(aPath)) {
             auto *sound = new sf::Sound;
             auto *buffer = new sf::SoundBuffer;
+            buffer->loadFromFile(aPath);
+            sound->setBuffer(*buffer);
+
 
             Asset::AssetManager::getInstance().addAsset<sf::SoundBuffer *>(aPath, buffer);
             Asset::AssetManager::getInstance().addAsset<sf::Sound *>(aPath, sound);
@@ -93,5 +96,15 @@ namespace ECS {
     void Sound::setGlobalVolume(float aVolume)
     {
         sf::Listener::setGlobalVolume(aVolume);
+    }
+
+    bool Sound::isPlaying(const std::string &aPath)
+    {
+        auto *sound = Asset::AssetManager::getInstance().getAsset<sf::Sound *>(aPath);
+
+        if (sound == nullptr) {
+            return false;
+        }
+        return sound->getStatus() == sf::Sound::Playing;
     }
 } // namespace ECS

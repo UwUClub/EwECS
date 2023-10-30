@@ -53,7 +53,7 @@ namespace ECS {
              * @brief create a sound
              * @param aPath
              */
-            void createSound(const std::string &aPath);
+            static void createSound(const std::string &aPath);
 
             /**
              * @brief play a sound
@@ -61,45 +61,53 @@ namespace ECS {
              * @param aLoop
              * @param aVolume
              */
-            void play(const std::string &aPath, bool aLoop, float aVolume);
+            static void play(const std::string &aPath, bool aLoop, float aVolume);
 
             /**
              * @brief stop a sound
              * @param aPath
              */
-            void stop(const std::string &aPath);
+            static void stop(const std::string &aPath);
 
             /**
              * @brief set the volume of a sound
              * @param aPath
              * @param aVolume
              */
-            void setVolume(const std::string &aPath, float aVolume);
+            static void setVolume(const std::string &aPath, float aVolume);
 
             /**
              * @brief set the loop of a sound
              * @param aPath
              * @param aLoop
              */
-            void setLoop(const std::string &aPath, bool aLoop);
+            static void setLoop(const std::string &aPath, bool aLoop);
 
             /**
              * @brief pause a sound
              * @param aPath
              */
-            void pause(const std::string &aPath);
+            static void pause(const std::string &aPath);
 
             /**
              * @brief resume a sound
              * @param aPath
+            sf::Sound *_sound;
              */
-            void resume(const std::string &aPath);
+            static void resume(const std::string &aPath);
 
             /**
              * @brief set the global volume
              * @param aVolume
              */
-            void setGlobalVolume(float aVolume);
+            static void setGlobalVolume(float aVolume);
+
+            /**
+             * @brief see if a sound is playing
+             * @param aPath
+             * @return true if the sound is playing
+             */
+            static bool isPlaying(const std::string &aPath);
 
     };
 } // namespace ECS
