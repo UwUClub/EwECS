@@ -89,6 +89,14 @@ namespace ECS {
                     std::cerr << e.what() << std::endl;
                 }
             }
+            if (event.type == sf::Event::KeyReleased && (_keyMap.find(event.key.code) != _keyMap.end())) {
+                try {
+                    eventManager->pushEvent<Event::KeyboardEvent>(
+                        Event::KeyboardEvent(_keyMap.at(event.key.code), Event::KeyState::RELEASED));
+                } catch (std::exception &e) {
+                    std::cerr << e.what() << std::endl;
+                }
+            }
             if (event.type == sf::Event::Closed) {
                 display->_window.close();
                 Core::World::getInstance().stop();
