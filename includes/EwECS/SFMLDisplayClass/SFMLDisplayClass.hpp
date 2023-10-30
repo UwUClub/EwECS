@@ -19,6 +19,7 @@
     #include "EwECS/SFMLDisplayClass/TextComponent.hpp"
     #include "EwECS/Utils.hpp"
     #include "EwECS/World.hpp"
+    #include "SFML/Graphics/Color.hpp"
     #include "SFML/Graphics/Font.hpp"
     #include "SFML/Graphics/Text.hpp"
     #include <unordered_map>
@@ -79,7 +80,8 @@ namespace ECS {
              *
              * @param aTexts SparseArray of all the texts
              */
-            static void displayTexts(Core::SparseArray<Component::TextComponent> &aTexts);
+            static void displayTexts(Core::SparseArray<Component::TextComponent> &aTexts,
+                                     Core::SparseArray<Utils::Vector2f> &aPos);
 
             /**
              * @brief call the display function of the window
@@ -108,6 +110,19 @@ namespace ECS {
              *
              */
             SFMLDisplayClass();
+
+            static const inline std::unordered_map<Component::TextColor, sf::Color> _colorMap = {
+                {Component::TextColor::RED, sf::Color::Red},
+                {Component::TextColor::GREEN, sf::Color::Green},
+                {Component::TextColor::BLUE, sf::Color::Blue},
+                {Component::TextColor::YELLOW, sf::Color::Yellow},
+                {Component::TextColor::WHITE, sf::Color::White},
+                {Component::TextColor::BLACK, sf::Color::Black},
+                {Component::TextColor::MAGENTA, sf::Color::Magenta},
+                {Component::TextColor::CYAN, sf::Color::Cyan},
+                {Component::TextColor::TRANSPARENT, sf::Color::Transparent},
+                {Component::TextColor::DEFAULT, sf::Color::White},
+            };
     };
 
 #endif /* !SDLDISPLAYClass_HPP_ */

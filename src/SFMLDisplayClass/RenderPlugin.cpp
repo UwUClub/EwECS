@@ -6,6 +6,7 @@
 #include "EwECS/SFMLDisplayClass/SFMLDisplayClass.hpp"
 #include "EwECS/World.hpp"
 #include "SFML/Graphics/Texture.hpp"
+#include "Utils.hpp"
 
 void ECS::Render::RenderPluginConfig::load(const std::string &aJsonPath)
 {
@@ -64,7 +65,7 @@ void ECS::Render::RenderPlugin::plug(ECS::Core::World &aWorld, ECS::Asset::Asset
     }
 
     aWorld.addSystem<Component::LoadedSprite, ECS::Utils::Vector2f>(ECS::SFMLDisplayClass::displayEntities);
-    aWorld.addSystem<Component::TextComponent>(ECS::SFMLDisplayClass::displayTexts);
+    aWorld.addSystem<Component::TextComponent, ECS::Utils::Vector2f>(ECS::SFMLDisplayClass::displayTexts);
     aWorld.addSystem<Component::LoadedSprite>(ECS::SFMLDisplayClass::loadTextures);
     aWorld.addSystem(ECS::SFMLDisplayClass::getInput);
     aWorld.addSystem(ECS::SFMLDisplayClass::display);
