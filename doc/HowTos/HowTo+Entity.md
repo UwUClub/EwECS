@@ -6,7 +6,7 @@
 - [Kill an Entity](#kill-an-entity)
 - [Conclusion](#conclusion)
 
-## How to use the ECS
+## How to use the Entities
 ### Prerequisites
 > You need to understand how to use [Component](./HowTo+Component.md) and [System](./HowTo+System.md).
 ### What is an Entity
@@ -131,4 +131,4 @@ int main(void)
 }
 ```
 ## Conclusion
-This is just some example of how to use the ECS, you can use it as you want.
+You now know how to use the core of this ECS.

@@ -6,7 +6,7 @@
 - [Run the Systems](#run-the-systems)
 - [Conclusion](#conclusion)
 
-## How to use the ECS
+## How to use the System
 ### What is a System
 - A `System` is a simple container for logic.
 - It's a function that can be registered in the `World`.
@@ -101,4 +101,4 @@ int main(void)
 ```
 
 ## Conclusion
-This is just some example of how to use the ECS, you can use it as you want.
+You need to create a `System` for each feature of your game, for example, if you want to move the player, you need to create a `System` that will update the `Position` of the player.

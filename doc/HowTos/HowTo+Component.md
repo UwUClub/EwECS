@@ -5,7 +5,7 @@
 - [Add the Component to the World](#add-the-component-to-the-world)
 - [Conclusion](#conclusion)
 
-## How to use the ECS
+## How to use the Components
 ### What is a Component
 - A `Component` is a simple container for data.
 - It's a struct that can be registered in the `World`.
@@ -78,3 +78,4 @@ int main(void)
 }
 ```
 ## Conclusion
+Create a `Component` for each data that you want your `Entity` to have.
