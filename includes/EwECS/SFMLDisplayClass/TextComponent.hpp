@@ -40,10 +40,10 @@ namespace Component {
              * @param color The color of the text
              * @param size The size of the text
              */
-            TextComponent(const std::string &text, TextColor color, std::size_t size)
-                : text(text),
-                  color(color),
-                  size(size)
+            TextComponent(const std::string &aText, TextColor aColor, std::size_t aSize)
+                : text(aText),
+                  color(aColor),
+                  size(aSize)
             {}
 
             std::string text;

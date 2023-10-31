@@ -1,15 +1,18 @@
 #include "EwECS/ConfigReader/ConfigReader.hpp"
 #include <fstream>
 #include <iostream>
+#include "Utils.hpp"
 
 ConfigReader::ConfigReader(const std::string &aJsonPath)
 {
-    loadConfig(aJsonPath);
+    std::string path = ECS::Utils::getFilePathInstall() + aJsonPath;
+    loadConfig(path);
 }
 
 json &ConfigReader::loadConfig(const std::string &aJsonPath)
 {
-    std::ifstream file(aJsonPath);
+    std::string path = ECS::Utils::getFilePathInstall() + aJsonPath;
+    std::ifstream file(path);
 
     if (!file.is_open()) {
         std::cerr << "Error: " << aJsonPath << " not found" << std::endl;
