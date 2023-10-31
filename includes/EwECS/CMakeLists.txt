@@ -5,5 +5,6 @@ add_subdirectory(Asset)
 add_subdirectory(Sound)
 add_subdirectory(Physic)
 add_subdirectory(Network)
+add_subdirectory(Music)
 
 target_include_directories(ecs PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

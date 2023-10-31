@@ -6,21 +6,31 @@
     #define EWECS_SOUND_HPP
 
     #include <string>
-    #include "EwECS/IPlugin.hpp"
+    #include <SFML/Audio.hpp>
+    #include <vector>
+    #include <unordered_map>
+    #include <memory>
+    #include "EwECS/Sound/SoundComponent.hpp"
+    #include "EwECS/SparseArray.hpp"
 
 namespace ECS {
-    class Sound : ECS::Plugin::IPlugin
+    class Sound
     {
         public:
+            /**
+             * @brief get the instance of Sound
+             * @return Sound
+             */
+            static Sound &getInstance()
+            {
+                static Sound instance;
+                return instance;
+            }
+
             /**
              * @brief the constructor of Sound
              */
             Sound() = default;
-
-            /**
-             * @brief the destructor of Sound
-             */
-            ~Sound() override = default;
 
             /**
              * @brief the copy constructor of Sound
@@ -43,72 +53,70 @@ namespace ECS {
             Sound &operator=(Sound &&aOther) noexcept = default;
 
             /**
-             * @brief plug the plugin
-             * @param aWorld
-             * @param aAssetManager
-             */
-            void plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager) override;
-
-            /**
              * @brief create a sound
+             *
              * @param aPath
              */
-            static void createSound(const std::string &aPath);
+            static sf::Sound *initSound(const std::string &aPath);
 
             /**
              * @brief play a sound
+             *
              * @param aPath
              * @param aLoop
              * @param aVolume
              */
-            static void play(const std::string &aPath, bool aLoop, float aVolume);
+            void play(Component::SoundComponent &aSound);
 
             /**
              * @brief stop a sound
+             *
              * @param aPath
              */
-            static void stop(const std::string &aPath);
-
-            /**
-             * @brief set the volume of a sound
-             * @param aPath
-             * @param aVolume
-             */
-            static void setVolume(const std::string &aPath, float aVolume);
-
-            /**
-             * @brief set the loop of a sound
-             * @param aPath
-             * @param aLoop
-             */
-            static void setLoop(const std::string &aPath, bool aLoop);
+            static void stop(Component::SoundComponent &aSound);
 
             /**
              * @brief pause a sound
+             *
              * @param aPath
              */
-            static void pause(const std::string &aPath);
-
-            /**
-             * @brief resume a sound
-             * @param aPath
-            sf::Sound *_sound;
-             */
-            static void resume(const std::string &aPath);
-
-            /**
-             * @brief set the global volume
-             * @param aVolume
-             */
-            static void setGlobalVolume(float aVolume);
+            static void pause(Component::SoundComponent &aSound);
 
             /**
              * @brief see if a sound is playing
+             *
              * @param aPath
              * @return true if the sound is playing
              */
-            static bool isPlaying(const std::string &aPath);
+            static bool isPlaying(Component::SoundComponent &aSound);
 
+            /**
+             * @brief create a sound
+             *
+             * @param aSounds
+             */
+            static void createSound(ECS::Core::SparseArray<Component::SoundComponent> &aSounds);
+
+            /**
+             * @brief play a sound
+             *
+             * @param aSounds
+             */
+            static void playSound(ECS::Core::SparseArray<Component::SoundComponent> &aSounds);
+
+            /**
+             * @brief stop a sound
+             *
+             * @param aSounds
+             */
+            static void stopSound(ECS::Core::SparseArray<Component::SoundComponent> &aSounds);
+
+            /**
+             * @brief pause a sound
+             *
+             * @param aSounds
+             */
+            static void pauseSound(ECS::Core::SparseArray<Component::SoundComponent> &aSounds);
     };
 } // namespace ECS
 
