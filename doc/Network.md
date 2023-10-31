@@ -61,19 +61,21 @@ If the packet format is not respected, the server sends back a packet of Error t
 | - | - | - | - |
 | `-2` | Client & Server | empty | empty |
 
+You must define your own packet types. They must be >= 0. The client packet of type 0 must be used for connection to the server. It has to be the first packet sent by the client. Otherwise the server will ignore it.
+
 ## Handlers
 
 The Network is composed of 3 singleton handlers: ``NetworkHandler``, ``ClientHandler`` and ``ServerHandler``.
 ``NetworkHandler`` defines common basis features used by client and server, such as packet send / reception.
 
-When using our Network tool you must define a struct for each packet payload. Those struct inherit from ``IPacket`` and must be packed properly.
+When using our Network tool you must define a struct for each packet payload. Those struct inherit from ``IPacket`` and must be packed using our ``PACK`` cross-platform macro function.
 Create an ``ECS::Network::PacketFactory`` to associate packet id to unserialization function. See our [example](#example).
 
 ### Client handler methods
 
 - Start the client
 ```c++
-void start(std::string &host, unsigned short port, unsigned short maxClients, ECS::Network::PacketFactory &factory)
+void start(std::string &host, unsigned short port, ECS::Network::PacketFactory &factory)
 ```
 
 - Setup packet reception
@@ -99,9 +101,9 @@ void stop()
 
 ### Server handler methods
 
-- Start the client
+- Start the server
 ```c++
-void start(std::string &host, unsigned short port, PacketFactory &factory)
+void start(std::string &host, unsigned short port, unsigned short maxClients, PacketFactory &factory)
 ```
 
 - Setup packet reception
@@ -168,5 +170,136 @@ stop()
 
 ## Example
 
+- Here is how to use our Network tool for a typical local server opened on port 4242, taking 100 players and receiving a move payload:
+
+``ServerGamePackets.hpp``:
+```c++
+#include "EwECS/Network/Packet.hpp"
+
+#ifndef SERVERGAMEPACKETS_HPP
+    #define SERVERGAMEPACKETS_HPP
+
+enum ServerGamePacketType = {
+    CONNECT = 0,
+    MOVE = 1,
+    DISCONNECT = 2,
+    MAX_SRV = 3
+};
+
+PACK(struct MovePayload
+     : ECS::Network::IPayload {
+         float moveX;
+         float moveY;
+
+         MovePayload() = default;
+
+         MovePayload(float aMoveX, float aMoveY)
+         {
+             moveX = aMoveX;
+             moveY = aMoveY;
+         }
+     });
+
+static ECS::Network::PacketFactory packetFactory = {
+    {GameEventType::MOVE, [](ECS::Network::Buffer &aBuffer) -> ECS::Network::IPayload * {
+         return ECS::Network::unserializePointer<MovePayload>(aBuffer);
+     }}};
+
+#endif
+```
+
+``main.cpp``:
+```c++
+#include "EwECS/Network/Serialization.hpp"
+#include "EwECS/Network/ServerHandler.hpp"
+#include "ServerGamePackets.hpp"
+
+int main()
+{
+    std::string host = "127.0.0.1";
+    unsigned short port = 4242;
+    unsigned short maxPlayers = 100;
+    ECS::Network::ServerHandler &server = ECS::Network::ServerHandler::getInstance();
+
+    server.onReceive([&server](int8_t aPacketType, ECS::Network::IPayload *aPayload, unsigned short aEntityId) {
+        if (aPacketType >= ServerGamePacketType::MAX_SRV) {
+            server.sendError(aEntityId);
+            return;
+        }
+        if (aPacketType >= 0) {
+            auto eventType = static_cast<ServerGamePacketType>(aPacketType);
+            // process game actions (eg. triggering an EwECS event)
+        } else if (aPacketType == AKNOWLEDGMENT_PACKET_TYPE) {
+            // process aknowledgment actions (eg. triggering an EwECS event to check client connection status)
+        }
+    });
+    server.start(host, port, maxPlayers, packetFactory);
+
+    // ...
+    // Add your components / systems / entities setup and game loop
+    // ...
+
+    server.stop();
+    return 0;
+}
+```
+
+- Here is how to use our Network tool for a typical client connecting to the server declared above:
+
+``ClientGamePackets.hpp``:
+```c++
+#include "EwECS/Network/Packet.hpp"
+#include "path/to/ServerGamePackets.hpp"
+
+#ifndef CLIENTGAMEPACKETS_HPP
+    #define CLIENTGAMEPACKETS_HPP
+
+enum ClientGamePacketType = {
+    // ...
+    // MAX_CLI = ...
+};
+
+// ... define your payloads ...
+
+static ECS::Network::PacketFactory packetFactory = {
+    // ...
+    // payload unserialiation
+    // ...
+};
+
+#endif
+```
+
+``main.cpp``
+```c++
+int main()
+{
+        std::string host = "127.0.0.1";
+        std::string port = 4242;
+        auto &client = ECS::Network::ClientHandler::getInstance();
+
+        client.onReceive([](int8_t aPacketType, ECS::Network::IPayload *aPayload) {
+            if (aPacketType >= ClientGamePacket::MAX_CLI) {
+                return;
+            }
+            if (aPacketType >= 0) {
+                auto eventType = static_cast<RType::ClientEventType>(aPacketType);
+
+                // process game actions (eg. triggering an EwECS event)
+            }
+        });
+
+        client.start(host, port, RType::packetFactory);
+        client.send(ServerGamePackets::CONNECT);
+
+        // ...
+        // Add your components / systems / entities setup and game loop
+        // ...
+
+        client.send(ServerGamePackets::DISCONNECT);
+        client.stop();
+        return 0;
+}
+```
 
 
