@@ -44,16 +44,16 @@ namespace ECS {
     sf::Texture *SFMLDisplayClass::getTexture(const std::string &aPath)
     {
         std::string path = _assetPath + aPath;
-        auto *texture = new sf::Texture();
         auto &assetManager = ECS::Asset::AssetManager::getInstance();
 
         if (!assetManager.hasAsset<sf::Texture *>(path)) {
+            auto *texture = new sf::Texture();
             if (texture->loadFromFile(path.c_str())) {
                 assetManager.addAsset<sf::Texture *>(path, texture);
                 return assetManager.getAsset<sf::Texture *>(path);
             }
             std::cerr << "Failed to create texture" << std::endl;
-            assetManager.removeAsset<sf::Texture *>(path);
+            delete texture;
             return nullptr;
         }
         return assetManager.getAsset<sf::Texture *>(path);

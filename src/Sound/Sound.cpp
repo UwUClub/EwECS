@@ -5,93 +5,139 @@
 #include "EwECS/Sound/Sound.hpp"
 #include <SFML/Audio.hpp>
 #include "EwECS/Asset/AssetManager.hpp"
+#include "EwECS/Logger.hpp"
+#include "EwECS/Sound/SoundComponent.hpp"
 #include "EwECS/World.hpp"
-#include "EwECS/Components/Components+Sounds.hpp"
+#include "EwECS/Utils.hpp"
+#include "EwECS/Logger.hpp"
 
 namespace ECS {
-    void Sound::plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager)
+    sf::Sound *Sound::initSound(const std::string &aPath)
     {
-        aWorld.registerComponent<Component::SoundsComponents>();
+        auto &assetManager = ECS::Asset::AssetManager::getInstance();
+        auto *sound = new sf::Sound();
+        std::string const assetPath = Utils::getFilePathInstall();
 
-        aAssetManager.registerAssetHandler<sf::Sound *>();
-        aAssetManager.registerAssetHandler<sf::SoundBuffer *>();
-    }
-
-    void Sound::createSound(const std::string &aPath)
-    {
-        if (!Asset::AssetManager::getInstance().hasAsset<sf::Sound *>(aPath)) {
-            auto *sound = new sf::Sound;
-            auto *buffer = new sf::SoundBuffer;
-
-            Asset::AssetManager::getInstance().addAsset<sf::SoundBuffer *>(aPath, buffer);
-            Asset::AssetManager::getInstance().addAsset<sf::Sound *>(aPath, sound);
+        if (!assetManager.hasAsset<sf::SoundBuffer *>(assetPath + aPath)) {
+            auto *buffer = new sf::SoundBuffer();
+            if (!buffer->loadFromFile(assetPath + aPath)) {
+                Logger::error("Sound not found: " + assetPath + aPath);
+                delete sound;
+                delete buffer;
+                return nullptr;
+            }
+            assetManager.addAsset<sf::SoundBuffer *>(assetPath + aPath, buffer);
+            sound->setBuffer(*buffer);
+        } else {
+            sound->setBuffer(*assetManager.getAsset<sf::SoundBuffer *>(assetPath + aPath));
         }
+        return sound;
     }
 
-    void Sound::play(const std::string &aPath, bool aLoop, float aVolume)
+    void Sound::play(Component::SoundComponent &aSound)
     {
-        auto *sound = Asset::AssetManager::getInstance().getAsset<sf::Sound *>(aPath);
-
-        if (sound == nullptr) {
+        if (aSound._sound == nullptr || aSound._state == Component::SOUND_STATE::UNKNOW) {
             return;
         }
-        sound->setLoop(aLoop);
-        sound->setVolume(aVolume);
-        sound->play();
-    }
-
-    void Sound::stop(const std::string &aPath)
-    {
-        auto *sound = Asset::AssetManager::getInstance().getAsset<sf::Sound *>(aPath);
-
-        if (sound == nullptr) {
+        if (isPlaying(aSound) || aSound._state == Component::SOUND_STATE::PLAYING) {
             return;
         }
-        sound->stop();
+
+        aSound._sound->setLoop(aSound._loop);
+        aSound._sound->setVolume(aSound._volume);
+        aSound._sound->play();
+        aSound._state = Component::SOUND_STATE::PLAYING;
     }
 
-    void Sound::setVolume(const std::string &aPath, float aVolume)
+    void Sound::stop(Component::SoundComponent &aSound)
     {
-        auto *sound = Asset::AssetManager::getInstance().getAsset<sf::Sound *>(aPath);
-
-        if (sound == nullptr) {
+        if (aSound._sound == nullptr) {
             return;
         }
-        sound->setVolume(aVolume);
+        aSound._sound->stop();
+        aSound._state = Component::SOUND_STATE::STOP;
     }
 
-    void Sound::setLoop(const std::string &aPath, bool aLoop)
+    void Sound::pause(Component::SoundComponent &aSound)
     {
-        auto *sound = Asset::AssetManager::getInstance().getAsset<sf::Sound *>(aPath);
-
-        if (sound == nullptr) {
+        if (aSound._sound == nullptr) {
             return;
         }
-        sound->setLoop(aLoop);
+        aSound._sound->pause();
+        aSound._state = Component::SOUND_STATE::PAUSE;
     }
 
-    void Sound::pause(const std::string &aPath)
+    bool Sound::isPlaying(Component::SoundComponent &aSound)
     {
-        auto *sound = Asset::AssetManager::getInstance().getAsset<sf::Sound *>(aPath);
-
-        if (sound == nullptr) {
-            return;
+        if (aSound._sound == nullptr) {
+            return false;
         }
-        sound->pause();
+        return aSound._sound->getStatus() == sf::Sound::Playing;
     }
 
-    void Sound::resume(const std::string &aPath)
+    void Sound::createSound(ECS::Core::SparseArray<Component::SoundComponent> &aSounds)
     {
-        auto *sound = Asset::AssetManager::getInstance().getAsset<sf::Sound *>(aPath);
+        ECS::Sound const &sound = ECS::Sound::getInstance();
 
-        if (sound == nullptr) {
-            return;
+        for (auto &soundsComponent : aSounds) {
+            if (!soundsComponent.has_value() || soundsComponent.value()._sound == nullptr
+                || soundsComponent.value()._state != Component::SOUND_STATE::UNKNOW) {
+                continue;
+            }
+            soundsComponent.value()._sound = sound.initSound(soundsComponent.value()._path);
+            if (soundsComponent.value()._sound == nullptr) {
+                Logger::error("Sound not found: " + soundsComponent.value()._path);
+                continue;
+            }
+            soundsComponent.value()._state = Component::SOUND_STATE::STOP;
         }
-        sound->play();
     }
 
-    void Sound::setGlobalVolume(float aVolume)
+    void Sound::playSound(ECS::Core::SparseArray<Component::SoundComponent> &aSounds)
     {
-        sf::Listener::setGlobalVolume(aVolume);
+        ECS::Sound &sound = ECS::Sound::getInstance();
+
+        for (auto &soundsComponent : aSounds) {
+            if (!soundsComponent.has_value() || soundsComponent.value()._state == Component::SOUND_STATE::UNKNOW
+                || soundsComponent.value()._sound == nullptr) {
+                continue;
+            }
+            sound.play(soundsComponent.value());
+        }
+    }
+
+    void Sound::stopSound(ECS::Core::SparseArray<Component::SoundComponent> &aSounds)
+    {
+        ECS::Sound const &sound = ECS::Sound::getInstance();
+
+        for (auto &soundsComponent : aSounds) {
+            if (!soundsComponent.has_value() || soundsComponent.value()._state == Component::SOUND_STATE::UNKNOW
+                || soundsComponent.value()._sound == nullptr) {
+                continue;
+            }
+            if ((soundsComponent.value()._state == Component::SOUND_STATE::STOP
+                 && soundsComponent.value()._sound->getStatus() == sf::Sound::Playing)
+                || (soundsComponent.value()._state == Component::SOUND_STATE::PAUSE
+                    && soundsComponent.value()._sound->getStatus() == sf::Sound::Paused)) {
+                soundsComponent.value()._state = Component::SOUND_STATE::STOP;
+                sound.stop(soundsComponent.value());
+            }
+        }
+    }
+
+    void Sound::pauseSound(ECS::Core::SparseArray<Component::SoundComponent> &aSounds)
+    {
+        ECS::Sound  const &sound = ECS::Sound::getInstance();
+
+        for (auto &soundsComponent : aSounds) {
+            if (!soundsComponent.has_value() || soundsComponent.value()._state == Component::SOUND_STATE::UNKNOW
+                || soundsComponent.value()._sound == nullptr) {
+                continue;
+            }
+            if (soundsComponent.value()._state == Component::SOUND_STATE::PAUSE
+                && soundsComponent.value()._sound->getStatus() == sf::Sound::Playing) {
+                sound.pause(soundsComponent.value());
+            }
+        }
     }
 } // namespace ECS
