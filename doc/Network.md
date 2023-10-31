@@ -4,6 +4,19 @@
 
 The Network part of the ECS handles client / server communication using UDP binary packets with [Boost Asio](https://www.boost.org/doc/libs/1_76_0/doc/html/boost_asio.html).
 
+## Table of contents
+
+1. [Components](#components)
+2. [Packet](#packet)
+    * [Format](#format)
+    * [Common types](#common-types)
+4. [Handlers](#handlers)
+    * [Client handler methods](#client-handler-methods)
+    * [Server handler methods](#server-handler-methods)
+6. [Example](#example)
+    * [Server](#server)
+    * [Client](#client)
+
 ## Components
  <table>
    <tr>
@@ -47,7 +60,7 @@ A packet is a sequence of bytes sent over the UDP connection. It has the followi
 | `type` | byte | Packet type |
 | `payload` | depends on packet type | Data carried by the packet |
 
-If the packet format is not respected, the server sends back a packet of Error type (see [packet types](#32-packet-types))
+If the packet format is not respected, the server sends back a packet of ``Error`` type.
 
 ### Common types
 
@@ -170,7 +183,9 @@ stop()
 
 ## Example
 
-- Here is how to use our Network tool for a typical local server opened on port 4242, taking 100 players and receiving a move payload:
+### Server
+
+Here is how to use our Network tool for a typical local server opened on port 4242, taking 100 players and receiving a move payload:
 
 ``ServerGamePackets.hpp``:
 ```c++
@@ -244,7 +259,9 @@ int main()
 }
 ```
 
-- Here is how to use our Network tool for a typical client connecting to the server declared above:
+### Client
+
+Here is how to use our Network tool for a typical client connecting to the server declared above:
 
 ``ClientGamePackets.hpp``:
 ```c++
