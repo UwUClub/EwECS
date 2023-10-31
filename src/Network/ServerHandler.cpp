@@ -5,6 +5,7 @@
 #include "EwECS/Network/NetworkHandler.hpp"
 #include "EwECS/Network/Packet.hpp"
 #include "EwECS/Network/Values.hpp"
+#include "EwECS/World.hpp"
 
 namespace ECS::Network {
 
@@ -13,6 +14,9 @@ namespace ECS::Network {
     void ServerHandler::start(std::string &aHost, unsigned short aPort, unsigned short aMaxClients,
                               PacketFactory &aPacketFactory)
     {
+        auto &world = ECS::Core::World::getInstance();
+        world.registerComponent<Component::Connection>();
+
         NetworkHandler &network = NetworkHandler::getInstance();
         udp::endpoint endpoint(boost::asio::ip::address::from_string(aHost), aPort);
 
