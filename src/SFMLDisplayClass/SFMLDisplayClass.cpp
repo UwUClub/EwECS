@@ -34,27 +34,11 @@ namespace ECS {
         auto &renderConfig = Render::RenderPluginConfig::getInstance();
 
         _window.create(sf::VideoMode(renderConfig._windowWidth, renderConfig._windowHeight), renderConfig._windowName);
+        _assetPath = Utils::getFilePathInstall();
         /*if (_window == nullptr) {
             std::cout << "Failed to create SFML window: " << std::endl;
             return;
         }*/
-#if defined(__linux__)
-        char result[PATH_MAX];
-        ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
-        if (count < 0 || count >= PATH_MAX) {
-            _assetPath = "./";
-            return;
-        }
-        result[count] = '\0';
-        char *dir = dirname(result);
-        if (dir == nullptr) {
-            _assetPath = "./";
-            return;
-        }
-        _assetPath = std::string(dir) + "/";
-#else
-        _assetPath = "./";
-#endif
     }
 
     sf::Texture *SFMLDisplayClass::getTexture(const std::string &aPath)
