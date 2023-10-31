@@ -1,11 +1,10 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include <string>
 #if defined(__linux__)
-
     #include <libgen.h>
     #include <linux/limits.h>
-    #include <string>
     #include <unistd.h>
 #endif
 namespace ECS::Utils {
