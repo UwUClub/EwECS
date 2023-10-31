@@ -11,29 +11,6 @@
 #include "EwECS/World.hpp"
 
 namespace ECS {
-    void MusicPluginConfig::load(const std::string &aJsonPath)
-    {
-        auto &configReader = ConfigReader::getInstance();
-        try {
-            auto &musicConf = configReader.loadConfig(aJsonPath)["music"];
-
-            _configPath = aJsonPath;
-        } catch (std::exception &e) {
-            Logger::error("Failed to load music config: " + std::string(e.what()));
-        }
-    }
-
-    MusicPluginConfig::MusicPluginConfig() = default;
-
-    MusicPluginConfig &MusicPluginConfig::getInstance()
-    {
-        static MusicPluginConfig instance;
-
-        return instance;
-    }
-
-    MusicPluginConfig::~MusicPluginConfig() = default;
-
     MusicPlugin::MusicPlugin() = default;
 
     MusicPlugin::~MusicPlugin() = default;

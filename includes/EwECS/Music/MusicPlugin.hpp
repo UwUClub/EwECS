@@ -8,24 +8,6 @@
 #include <EwECS/IPlugin.hpp>
 
 namespace ECS {
-    class MusicPluginConfig final : public ECS::Plugin::IConfigPlugin
-    {
-        private:
-            MusicPluginConfig();
-
-        public:
-            static MusicPluginConfig &getInstance();
-            MusicPluginConfig(MusicPluginConfig &&) = default;
-            MusicPluginConfig(const MusicPluginConfig &) = default;
-            MusicPluginConfig &operator=(MusicPluginConfig &&) = default;
-            MusicPluginConfig &operator=(const MusicPluginConfig &) = default;
-            ~MusicPluginConfig() final;
-
-            void load(const std::string &aJsonPath) final;
-
-            std::string _configPath;
-    };
-
     class MusicPlugin final : public ECS::Plugin::IPlugin
     {
         public:

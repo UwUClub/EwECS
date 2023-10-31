@@ -11,29 +11,6 @@
 #include "EwECS/World.hpp"
 
 namespace ECS {
-    void SoundPluginConfig::load(const std::string &aJsonPath)
-    {
-        auto &configReader = ConfigReader::getInstance();
-        try {
-            auto &soundConf = configReader.loadConfig(aJsonPath)["sound"];
-
-            _configPath = aJsonPath;
-        } catch (std::exception &e) {
-            Logger::error("Failed to load sound config: " + std::string(e.what()));
-        }
-    }
-
-    SoundPluginConfig::SoundPluginConfig() = default;
-
-    SoundPluginConfig &SoundPluginConfig::getInstance()
-    {
-        static SoundPluginConfig instance;
-
-        return instance;
-    }
-
-    SoundPluginConfig::~SoundPluginConfig() = default;
-
     SoundPlugin::SoundPlugin() = default;
 
     SoundPlugin::~SoundPlugin() = default;

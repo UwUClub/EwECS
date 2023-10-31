@@ -8,24 +8,6 @@
 #include <EwECS/IPlugin.hpp>
 
 namespace ECS {
-    class SoundPluginConfig final : public ECS::Plugin::IConfigPlugin
-    {
-        private:
-            SoundPluginConfig();
-
-        public:
-            static SoundPluginConfig &getInstance();
-            SoundPluginConfig(SoundPluginConfig &&) = default;
-            SoundPluginConfig(const SoundPluginConfig &) = default;
-            SoundPluginConfig &operator=(SoundPluginConfig &&) = default;
-            SoundPluginConfig &operator=(const SoundPluginConfig &) = default;
-            ~SoundPluginConfig() final;
-
-            void load(const std::string &aJsonPath) final;
-
-            std::string _configPath;
-    };
-
     class SoundPlugin final : public ECS::Plugin::IPlugin
     {
         public:
@@ -37,8 +19,6 @@ namespace ECS {
             ~SoundPlugin() final;
 
             void plug(ECS::Core::World &aWorld, ECS::Asset::AssetManager &aAssetManager) final;
-
-        private:
     };
 } // namespace ECS::Sound
 

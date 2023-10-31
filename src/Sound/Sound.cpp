@@ -8,25 +8,28 @@
 #include "EwECS/Logger.hpp"
 #include "EwECS/Sound/SoundComponent.hpp"
 #include "EwECS/World.hpp"
+#include "EwECS/Utils.hpp"
+#include "EwECS/Logger.hpp"
 
 namespace ECS {
     sf::Sound *Sound::initSound(const std::string &aPath)
     {
         auto &assetManager = ECS::Asset::AssetManager::getInstance();
         auto *sound = new sf::Sound();
+        std::string const assetPath = Utils::getFilePathInstall();
 
-        if (!assetManager.hasAsset<sf::SoundBuffer *>(aPath)) {
+        if (!assetManager.hasAsset<sf::SoundBuffer *>(assetPath + aPath)) {
             auto *buffer = new sf::SoundBuffer();
-            if (!buffer->loadFromFile(aPath)) {
-                std::cerr << "Sound not found: " << aPath << '\n';
+            if (!buffer->loadFromFile(assetPath + aPath)) {
+                Logger::error("Sound not found: " + assetPath + aPath);
                 delete sound;
                 delete buffer;
                 return nullptr;
             }
-            assetManager.addAsset<sf::SoundBuffer *>(aPath, buffer);
+            assetManager.addAsset<sf::SoundBuffer *>(assetPath + aPath, buffer);
             sound->setBuffer(*buffer);
         } else {
-            sound->setBuffer(*assetManager.getAsset<sf::SoundBuffer *>(aPath));
+            sound->setBuffer(*assetManager.getAsset<sf::SoundBuffer *>(assetPath + aPath));
         }
         return sound;
     }
