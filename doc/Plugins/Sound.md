@@ -2,7 +2,7 @@
 ## Contents
 
 - [Plug the Sound](#Plug-the-sound)
-- [Create the sound component](#create-sound-component)
+- [Create the sound component](#Create-a-sound-component)
 - [Stop a sound](#stop-a-sound)
 - [Pause a sound](#pause-a-sound)
 - [Check if a sound is playing](#check-if-is-playing)
@@ -35,7 +35,7 @@ auto entity_id = AddEntity::addEntity(
 world.emplaceEntityComponent<Component::SoundComponent>(entity_id, "assets/sounds/pew.mp3", 40, false);
 ```
 
-in this exemple we have created an entity "missile" with all the attributes she need and with this line:
+in this exemple we have created an entity "missile" with all the attributes it needs and with this line:
 
 ```c++
 world.emplaceEntityComponent<Component::SoundComponent>(entity_id, "assets/sounds/pew.mp3", 40, false);

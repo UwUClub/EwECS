@@ -2,7 +2,7 @@
 ## Contents
 
 - [Plug the music](#Plug-the-music)
-- [Create the music component](#create-music-component)
+- [Create the music component](#Create-a-music-component)
 - [Stop a music](#stop-a-music)
 - [Pause a music](#pause-a-music)
 - [Check if a music is playing](#check-if-is-playing)
@@ -34,13 +34,14 @@ auto idx = AddEntity::addEntity(ECS::Utils::Vector2f {0, 0},
 world.emplaceEntityComponent<Component::MusicComponent>(idx, "assets/sounds/rtype.mp3", 100, true);
 ```
 
-in this exemple we have created an entity "missile" with all the attributes she need and with this line:
+in this exemple we have created an entity "missile" with all the attributes it needs and with this line:
 
 ```c++
 world.emplaceEntityComponent<Component::musicComponent>(entity_id, "assets/sounds/rtype.mp3", 100, true);
 ```
 
 we have linked a song to this entity, so every time the entity "missile" is created, a music is going to be played in our case: "rtype.mp3"
+it will be played only if it's not already playing
 
 the parameters of the music component are:
 - the path of the music
