@@ -5,6 +5,7 @@ add_subdirectory(Asset)
 add_subdirectory(Sound)
 add_subdirectory(Physic)
 add_subdirectory(Network)
+add_subdirectory(Music)
 
 target_sources(ecs PRIVATE
     World.cpp

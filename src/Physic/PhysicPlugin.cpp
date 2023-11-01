@@ -53,17 +53,17 @@ void ECS::Physic::PhysicPlugin::checkCollision(ECS::Core::SparseArray<ECS::Utils
         auto &pos = aPos[idx].value();
         auto &hitBox = aHitBox[idx].value();
 
+        if (hitBox.isColliding) {
+            hitBox.isColliding = false;
+            hitBox.collidingId.clear();
+        }
+
         for (size_t idx2 = 0; idx2 < size; idx2++) {
-            if (!aPos[idx2].has_value() || !aHitBox[idx2].has_value()) {
+            if (!aPos[idx2].has_value() || !aHitBox[idx2].has_value() || idx == idx2) {
                 continue;
             }
             auto &pos2 = aPos[idx2].value();
             auto &hitBox2 = aHitBox[idx2].value();
-
-            if (hitBox.isColliding) {
-                hitBox.isColliding = false;
-                hitBox.collidingId.clear();
-            }
 
             if (pos.x <= pos2.x + hitBox2.width && pos.x + hitBox.width >= pos2.x && pos.y <= pos2.y + hitBox2.height
                 && pos.y + hitBox.height >= pos2.y) {

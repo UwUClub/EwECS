@@ -20,6 +20,7 @@
 #include "EwECS/SFMLDisplayClass/RenderPlugin.hpp"
 #include "EwECS/Utils.hpp"
 #include "EwECS/World.hpp"
+#include "SFML/Graphics/Text.hpp"
 
 #if defined(__linux__)
     #include <libgen.h>
@@ -33,42 +34,26 @@ namespace ECS {
         auto &renderConfig = Render::RenderPluginConfig::getInstance();
 
         _window.create(sf::VideoMode(renderConfig._windowWidth, renderConfig._windowHeight), renderConfig._windowName);
+        _assetPath = Utils::getFilePathInstall();
         /*if (_window == nullptr) {
             std::cout << "Failed to create SFML window: " << std::endl;
             return;
         }*/
-#if defined(__linux__)
-        char result[PATH_MAX];
-        ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
-        if (count < 0 || count >= PATH_MAX) {
-            _assetPath = "./";
-            return;
-        }
-        result[count] = '\0';
-        char *dir = dirname(result);
-        if (dir == nullptr) {
-            _assetPath = "./";
-            return;
-        }
-        _assetPath = std::string(dir) + "/";
-#else
-        _assetPath = "./";
-#endif
     }
 
     sf::Texture *SFMLDisplayClass::getTexture(const std::string &aPath)
     {
         std::string path = _assetPath + aPath;
-        auto *texture = new sf::Texture();
         auto &assetManager = ECS::Asset::AssetManager::getInstance();
 
         if (!assetManager.hasAsset<sf::Texture *>(path)) {
+            auto *texture = new sf::Texture();
             if (texture->loadFromFile(path.c_str())) {
                 assetManager.addAsset<sf::Texture *>(path, texture);
                 return assetManager.getAsset<sf::Texture *>(path);
             }
             std::cerr << "Failed to create texture" << std::endl;
-            assetManager.removeAsset<sf::Texture *>(path);
+            delete texture;
             return nullptr;
         }
         return assetManager.getAsset<sf::Texture *>(path);
@@ -85,6 +70,14 @@ namespace ECS {
                 try {
                     eventManager->pushEvent<Event::KeyboardEvent>(
                         Event::KeyboardEvent(_keyMap.at(event.key.code), Event::KeyState::PRESSED));
+                } catch (std::exception &e) {
+                    std::cerr << e.what() << std::endl;
+                }
+            }
+            if (event.type == sf::Event::KeyReleased && (_keyMap.find(event.key.code) != _keyMap.end())) {
+                try {
+                    eventManager->pushEvent<Event::KeyboardEvent>(
+                        Event::KeyboardEvent(_keyMap.at(event.key.code), Event::KeyState::RELEASED));
                 } catch (std::exception &e) {
                     std::cerr << e.what() << std::endl;
                 }
@@ -150,7 +143,8 @@ namespace ECS {
         }
     }
 
-    void SFMLDisplayClass::displayTexts(Core::SparseArray<Component::TextComponent> &aTexts)
+    void SFMLDisplayClass::displayTexts(Core::SparseArray<Component::TextComponent> &aTexts,
+                                        Core::SparseArray<Utils::Vector2f> &aPos)
     {
         SFMLDisplayClass &display = SFMLDisplayClass::getInstance();
         Render::RenderPluginConfig &renderConfig = Render::RenderPluginConfig::getInstance();
@@ -158,14 +152,32 @@ namespace ECS {
         if (!renderConfig._isFontLoaded) {
             return;
         }
-        for (auto &aText : aTexts) {
-            if (!aText.has_value()) {
+        auto size = aTexts.size();
+        for (std::size_t idx = 0; idx < size; idx++) {
+            auto &textDataOpt = aTexts[idx];
+            auto &posOpt = aPos[idx];
+
+            if (!textDataOpt.has_value()) {
                 continue;
             }
-            auto &text = aText.value().text;
+            auto &textData = textDataOpt.value();
+            sf::Text text;
 
-            if (text.getFont() == nullptr) {
-                text.setFont(renderConfig._font);
+            text.setFont(renderConfig._font);
+            text.setString(textData.text);
+            text.setCharacterSize(textData.size);
+            auto color = textData.color;
+            if (_colorMap.find(color) != _colorMap.end()) {
+                text.setFillColor(_colorMap.at(color));
+            } else {
+                text.setFillColor(sf::Color::White);
+            }
+            if (posOpt.has_value()) {
+                auto &pos = posOpt.value();
+
+                text.setPosition(pos.x, pos.y);
+            } else {
+                text.setPosition(0, 0);
             }
             display._window.draw(text);
         }
