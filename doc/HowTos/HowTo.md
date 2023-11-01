@@ -1,13 +1,10 @@
 # How To
 ## Contents
-- [Create a Component](#create-a-component)
-- [Create a System](#create-a-system)
-- [Add the Component to the World](#add-the-component-to-the-world)
-- [Add the System to the World](#add-the-system-to-the-world)
-- [Create an Entity](#create-an-entity)
-- [Add a Component to an Entity](#add-a-component-to-an-entity)
-- [Kill an Entity](#kill-an-entity)
-- [Conclusion](#conclusion)
+- [Components](#components)
+- [Systems](#systems)
+- [Entities](#entities)
+- [Events](#events)
+- [Assets](#assets)
 
 ## How to use the ECS
 ### Components
@@ -18,3 +15,5 @@ Refer to the [System tutorial](./HowTo+System.md) file.
 Refer to the [Entity tutorial](./HowTo+Entity.md) file.
 ### Events
 Refer to the [Event tutorial](./HowTo+Event.md) file.
+### Assets
+Refer to the [Asset tutorial](./HowTo+Asset.md) file.

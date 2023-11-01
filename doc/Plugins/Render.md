@@ -27,7 +27,7 @@ int main(void)
 
     // Get the instance of the assets manager
     ECS::Asset::AssetManager &assetManager = ECS::Asset::AssetManager::getInstance();
-    
+
     // Get the instance of the render plugin
     ECS::Render::RenderPlugin renderPlugin;
 
