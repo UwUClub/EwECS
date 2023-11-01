@@ -82,8 +82,8 @@ namespace ECS::Network {
             send(ERROR_PACKET_TYPE, _readEndpoint);
         }
         try {
-        _readInbound.consume(_readInbound.size());
-        listen();
+            _readInbound.consume(_readInbound.size());
+            listen();
         } catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
         }
@@ -92,10 +92,10 @@ namespace ECS::Network {
     void NetworkHandler::send(int8_t aType, const udp::endpoint &aEndpoint)
     {
         try {
-        PacketHeader header(aType);
+            PacketHeader header(aType);
 
-        std::vector<uint8_t> strBuff = serialize(header);
-        _socket.send_to(boost::asio::buffer(strBuff), aEndpoint);
+            std::vector<uint8_t> strBuff = serialize(header);
+            _socket.send_to(boost::asio::buffer(strBuff), aEndpoint);
         } catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
         }
@@ -121,17 +121,17 @@ namespace ECS::Network {
     void NetworkHandler::stop()
     {
         try {
-        for (auto &sender : _senders) {
-            sender.second.second = false;
-            if (sender.second.first.joinable()) {
-                sender.second.first.join();
+            for (auto &sender : _senders) {
+                sender.second.second = false;
+                if (sender.second.first.joinable()) {
+                    sender.second.first.join();
+                }
             }
-        }
-        _ioService.stop();
-        if (_ioThread.joinable()) {
-            _ioThread.join();
-        }
-        _socket.close();
+            _ioService.stop();
+            if (_ioThread.joinable()) {
+                _ioThread.join();
+            }
+            _socket.close();
         } catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
         }
