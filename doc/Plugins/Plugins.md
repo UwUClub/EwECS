@@ -69,4 +69,6 @@ int main(void)
     - [Physic](./Physic.md)
     - [Render](./Render.md)
     - [Network](./Network.md)
+    - [Sound](./Sound.md)
+    - [Music](./Music.md)
 
