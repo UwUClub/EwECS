@@ -104,10 +104,10 @@ namespace ECS::Network {
     void NetworkHandler::sendAknowledgment(std::string &aUuid, const udp::endpoint &aEndpoint)
     {
         try {
-        PacketHeader header(AKNOWLEDGMENT_PACKET_TYPE, aUuid);
+            PacketHeader header(AKNOWLEDGMENT_PACKET_TYPE, aUuid);
 
-        std::vector<uint8_t> strBuff = serialize(header);
-        _socket.send_to(boost::asio::buffer(strBuff), aEndpoint);
+            std::vector<uint8_t> strBuff = serialize(header);
+            _socket.send_to(boost::asio::buffer(strBuff), aEndpoint);
         } catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
         }
