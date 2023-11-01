@@ -80,7 +80,7 @@ int main(void)
 ```
 
 ### Use your own json file to create entity
- - To create your you need to get the list of `LoadedSprite` components first the add your own LoadedSprite to the list.
+ - To create your entity you need to get the list of `LoadedSprite` components first the add your own LoadedSprite to the list.
  - Once it has been added to the list your entity will be handle by the program.
 
 ```cpp
